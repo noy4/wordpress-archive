@@ -1,0 +1,29 @@
+{
+  "name": "wordpress-archive",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "WordPress archive site generator",
+  "scripts": {
+    "build": "tsc",
+    "dev": "vitepress dev docs",
+    "preview": "vitepress preview docs",
+    "convert": "npm run build && node dist/index.js",
+    "start": "npm run convert && npm run dev"
+  },
+  "keywords": [
+    "wordpress",
+    "vitepress",
+    "archive"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^20.11.0",
+    "typescript": "^5.3.0",
+    "vitepress": "^1.0.0",
+    "xml2js": "^0.6.0"
+  },
+  "devDependencies": {
+    "@types/xml2js": "^0.4.14"
+  }
+}
