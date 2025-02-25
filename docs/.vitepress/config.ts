@@ -11,7 +11,6 @@ export default defineConfig({
   themeConfig: {
     // サイトのナビゲーション
     nav: [
-      { text: 'ホーム', link: '/' },
       { text: '記事一覧', link: '/posts/' },
       { text: 'カテゴリー', link: '/categories/' },
       { text: 'タグ', link: '/tags/' }
@@ -22,7 +21,6 @@ export default defineConfig({
       {
         text: 'ナビゲーション',
         items: [
-          { text: 'ホーム', link: '/' },
           { text: '記事一覧', link: '/posts/' },
           { text: 'カテゴリー', link: '/categories/' },
           { text: 'タグ', link: '/tags/' }
