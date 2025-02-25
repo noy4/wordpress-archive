@@ -43,15 +43,6 @@ export default defineConfig({
     ]
   },
 
-  // Markdownの設定
-  markdown: {
-    lineNumbers: true,
-    // コードブロックの設定
-    theme: 'github-dark',
-    // 目次の設定
-    toc: { level: [2, 3] }
-  },
-
   // 多言語設定
   locales: {
     root: {
