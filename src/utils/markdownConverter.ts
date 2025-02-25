@@ -72,6 +72,17 @@ layout: doc
       '![]($1)'
     );
 
+    // 見出しタグをMarkdownに変換
+    content = content.replace(/<h1[^>]*>(.*?)<\/h1>/g, '# $1');
+    content = content.replace(/<h2[^>]*>(.*?)<\/h2>/g, '## $1');
+    content = content.replace(/<h3[^>]*>(.*?)<\/h3>/g, '### $1');
+    content = content.replace(/<h4[^>]*>(.*?)<\/h4>/g, '#### $1');
+    content = content.replace(/<h5[^>]*>(.*?)<\/h5>/g, '##### $1');
+    content = content.replace(/<h6[^>]*>(.*?)<\/h6>/g, '###### $1');
+
+    // 段落タグを改行に変換
+    content = content.replace(/<p[^>]*>(.*?)<\/p>/g, '$1\n\n');
+
     // 残りのHTMLタグを削除
     content = content.replace(/<[^>]+>/g, '');
 

@@ -12,13 +12,13 @@ This A guy I met at "芸工就活何でも相談会！ -エンジニア編-" and
 
 I was going to make a survey-bingo-app with those techniques anyway, so I decided to do it this week.
 
-What I did this week
+## What I did this week
 
   See the Pen アンケ0.2 by noy4
   (@noy4) on CodePen.
 
-Feedback
+## Feedback
 
-Other
+## Other
 
 7/1 ゼミ用

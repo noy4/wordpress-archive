@@ -13,17 +13,17 @@ layout: doc
 
 さ、今週の報告始メルシー♪
 
-今週したこと
+## 今週したこと
 
 ゲーミファイアンケートの海外の事例を探した。
 
-google scholarにて
+### google scholarにて
 
 次のワードで検索したがそれらしきは見当たらず。
 
 survey gamificationresearch gamesgamification formsgamification online surveyサーベイ　ゲーミフィケーション
 
-google検索にて
+### google検索にて
 
 googleで「survey gamification」の検索結果を見ていった。やってる会社がちらほら見受けられた。
 
@@ -59,13 +59,13 @@ https://www.theguardian.com/media-network/media-network-blog/2012/aug/15/online-
 
 [外部コンテンツを表示](//www.slideshare.net/slideshow/embed_code/key/2FgbVCk99HC8Mt)   Gamification in market research  from Elias Veris 
 
-良さげな英論文を発見
+### 良さげな英論文を発見
 
 https://hal.inria.fr/hal-01599660
 
 引用されている論文にもそれっぽいのあり。
 
-結構あるなオイ
+### 結構あるなオイ
 
 桑氏がやろうとしていたのは
 
@@ -79,7 +79,7 @@ https://hal.inria.fr/hal-01599660
 
 海外の研究とか調べ出したら沼じゃね？
 
-研究計画
+## 研究計画
 
 まずは見つけた英論文読む
 引用とかも見てみる。でも英語でいっぱい読むん嫌やな
@@ -94,10 +94,10 @@ https://hal.inria.fr/hal-01599660
 
 ついには卒論執筆
 
-フィードバック
+## フィードバック
 
 論文見つけられたのはとってもイイネ
 
-他
+## 他
 
 6/17 定例ゼミ用

@@ -6,13 +6,13 @@ layout: doc
 
 DjangoGirlsで作ったWebアプリを、ConoHa VPSでデプロイを見ながらやって詰まったところを補足します。
 
-手順
+## 手順
 
-2. ConohaのSSH関連を設定　は飛ばせる
+### 2. ConohaのSSH関連を設定　は飛ばせる
 
 デプロイの練習したいだけのただの学生なら飛ばしていいです多分
 
-python→python3.6にする
+### python→python3.6にする
 
 3.3. DataBaseを作る　の前にpython3.6と打つ代わりにpythonと打つだけでできるようにするとあとあと楽な気がします。
 
@@ -30,7 +30,7 @@ Python 3.6.8
 
 https://gametech.vatchlog.com/2019/04/19/puthon36-install/
 
-sqlite3のアップデート
+### sqlite3のアップデート
 
 3.3. DataBaseを作る　で
 
@@ -56,19 +56,19 @@ $ ldconfig
 
 https://www.infraeye.com/study/linuxz6.html
 
-CSSが反映されない！
+## CSSが反映されない！
 
 デプロイ環境でCSSを反映させるには2つ必要操作があるようです。
 
 collectstaticApacheのstatic設定
 
-collectstatic
+### collectstatic
 
 $ python manage.py collectstatic
 
 上の操作で、cssやらを集めたstaticというフォルダが、setting.pyの中でSTATIC_ROOTに設定した場所にできます。
 
-Apacheのstatic設定
+### Apacheのstatic設定
 
 /etc/httpd/conf/httpd.conf の中に、IncludeOptional conf.d/*.conf という記述があり、conf.d以下のファイルたちが読み込まれるようになっている。
 
@@ -92,12 +92,12 @@ Alias /static/ /home/django/djangogirls/static/
 
 $ sudo service httpd restart
 
-Debug=Trueについて
+## Debug=Trueについて
 
 mysite/setting.py の中のDebug=True は公開前にFalseにすべきらしい
 
 https://codor.co.jp/django/difference-debug-true-or-false
 
-完了なり
+## 完了なり
 
 これでいけるはずです。

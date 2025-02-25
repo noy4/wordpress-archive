@@ -10,26 +10,26 @@ layout: doc
 
 始まりの論文が引用されている論文を便宜上「受け継ぎし論文ニュー・エイジ」と呼ぶ。
 
-今週したこと
+## 今週したこと
 
 古の論文のうち、オンライン調査のゲーミファイについてのものだというのうち、を読んだ。
 
 Effects of Gamification on Participation and Data Quality in a Real-World Market Research Domain.
    Cechanowicz, Jared, Carl Gutwin, Briana Brownell, and Larry Goodfellow. “Effects of Gamification on Participation and Data Quality in a Real-World Market Research Domain.” In Proceedings of the First International Conference on Gameful Design, Research, and Applications, 58–65, 2013.      
 
-市場調査におけるゲーミフィケーションが及ぼす回答率とデータの質への影響
+### 市場調査におけるゲーミフィケーションが及ぼす回答率とデータの質への影響
 
-課題
+#### 課題
 
 ゲーミフィケーションのどんな要素が有効かの実証的な調査が欠けている
 
-やったこと
+#### やったこと
 
 3つのオンライン調査を実施
 
 普通の部分ゲーミファイ完全ゲーミファイ
 
-結果・考察
+#### 結果・考察
 
 ゲーミファイ度合いが上がるほど回答率UP↑テーマ、チャレンジ、ご褒美などの要素を加えずとも、ゲームメカニクスだけでも回答率は上げられる。→デザイナーに嬉しい情報（余計な労力減らせる）なお加えればさらに回答率は上がる。
 
@@ -37,11 +37,11 @@ Effects of Gamification on Participation and Data Quality in a Real-World Market
 
 ゲーミファイ度合いによって回答データが異なる部分があった。ゲーミファイ版で回答字数が減った制限時間を設けた、キーワードを指定したためゲーミファイ版で正答率が上がった。誤答時に正しい回答を見せるというフィードバックを与えたところ、回答者が学習し、正答率が上がったのではないか。→ここだけ再検証したらやはりそーだった
 
-今後
+#### 今後
 
 ゲーミファイ調査経験者に2回目以降通用するか効果が持続するゲーミファイ調査の開発時間のプレッシャーと回答の質の調査
 
-研究にどう活かす
+## 研究にどう活かす
 
 ３パターンに分けるのは良いかもしれない。
 ノーマルビンゴアンケ（ランキングなしビンゴアンケ（ランキングあり
@@ -54,7 +54,7 @@ Effects of Gamification on Participation and Data Quality in a Real-World Market
 効果が持続するゲーミファイ
 進めるにつれて報酬が大きくなるように設計するとモチベは保たれるかの検証
 
-桑の方針
+## 桑の方針
 
 古の論文・受け継ぎし論文を読み進めていく予定。飽きたらプログラムのロジックを考える。
 
@@ -64,10 +64,10 @@ Effects of Gamification on Participation and Data Quality in a Real-World Market
 
 ↑ガラポン時のエフェクト周りのロジックを調べて実装
 
-フィードバック
+## フィードバック
 
 そもそもアンケの問題について調べようウシアマ研で昔ビンゴか鍋かでなんかやってる人おったで実質的な報酬があるとおもろそうね
 
-他
+## 他
 
 7/8 定例ゼミ用
