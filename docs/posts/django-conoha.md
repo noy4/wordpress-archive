@@ -1,7 +1,6 @@
 ---
 title: DjangoをConohaでデプロイ
 date: 2020-03-23
-layout: doc
 ---
 
 # DjangoをConohaでデプロイ

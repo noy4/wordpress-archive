@@ -1,7 +1,6 @@
 ---
 title: YouTube大学に通ってます
 date: 2019-08-26
-layout: doc
 ---
 
 # YouTube大学に通ってます

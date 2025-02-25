@@ -1,7 +1,5 @@
 ---
-layout: doc
 title: カテゴリー一覧
-aside: true
 ---
 
 # カテゴリー一覧

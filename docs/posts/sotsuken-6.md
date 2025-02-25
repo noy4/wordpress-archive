@@ -1,7 +1,6 @@
 ---
 title: 卒業研究\#6 〜Hello, world! My creation has started〜
 date: 2020-06-29
-layout: doc
 ---
 
 # 卒業研究#6 〜Hello, world! My creation has started〜

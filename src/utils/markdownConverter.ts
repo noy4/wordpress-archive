@@ -58,7 +58,6 @@ export class MarkdownConverter {
     return `---
 title: ${this.escapeYaml(post.title)}
 date: ${date}
-layout: doc
 ---`;
   }
 

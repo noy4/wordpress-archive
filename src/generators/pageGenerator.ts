@@ -10,9 +10,7 @@ interface PageContent {
 export class PageGenerator {
   private async writePage(page: PageContent): Promise<void> {
     const content = `---
-layout: doc
 title: ${page.title}
-aside: true
 ---
 
 ${page.content}`;

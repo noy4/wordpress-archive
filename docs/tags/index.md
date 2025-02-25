@@ -1,7 +1,5 @@
 ---
-layout: doc
 title: タグ一覧
-aside: true
 ---
 
 # タグ一覧

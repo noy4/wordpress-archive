@@ -1,7 +1,5 @@
 ---
-layout: doc
 title: 記事一覧
-aside: true
 ---
 
 # 記事一覧
