@@ -4,6 +4,8 @@ date: 2020-05-25
 layout: doc
 ---
 
+# 卒業研究#1 〜興味の整理〜
+
 ## 今のクワ興味
 
 ![](https://chankuwa.com/wp-content/uploads/2020/05/スクリーンショット-2020-05-26-0.54.21-1024x574.png)

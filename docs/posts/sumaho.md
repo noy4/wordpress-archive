@@ -4,6 +4,8 @@ date: 2020-03-06
 layout: doc
 ---
 
+# スマホ
+
 ![](https://chankuwa.com/wp-content/uploads/2020/03/smaho.png)
 
 あなたが1日の中でもっとも時間を共にするのは誰ですか？

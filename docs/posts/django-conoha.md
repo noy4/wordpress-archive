@@ -4,6 +4,8 @@ date: 2020-03-23
 layout: doc
 ---
 
+# DjangoをConohaでデプロイ
+
 DjangoGirlsで作ったWebアプリを、ConoHa VPSでデプロイを見ながらやって詰まったところを補足します。
 
 ## 手順

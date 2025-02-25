@@ -4,6 +4,8 @@ date: 2019-08-26
 layout: doc
 ---
 
+# YouTube大学に通ってます
+
 桑迫は思った。
 
 ![](https://chankuwa.com/wp-content/uploads/2019/08/社長のアイコン-150x150.png)

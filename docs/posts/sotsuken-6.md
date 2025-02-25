@@ -4,6 +4,8 @@ date: 2020-06-29
 layout: doc
 ---
 
+# 卒業研究#6 〜Hello, world! My creation has started〜
+
 （定例ゼミに英語の先生が2人集まるのでこれは英語練習のいいチャンスなのでは？と思い英語で報告にトライ）
 
 I was supposed to read papers which the paper I read last week cited which is cited from the paper I read last week, but I didn't do that.
