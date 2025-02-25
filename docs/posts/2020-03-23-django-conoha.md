@@ -77,21 +77,17 @@ $ python manage.py collectstatic
 
 変更前
 
-```apache
 Alias /static/ /home/django/sample/static/
 <Directory /home/django/sample/static/>
     Require all granted
 </Directory>
-```
 
 変更後
 
-```apache
 Alias /static/ /home/django/djangogirls/static/
 <Directory /home/django/djangogirls/static/>
     Require all granted
 </Directory>
-```
 
 書き換えおわったら、サービスを再起動してください。
 

@@ -18,8 +18,12 @@ export class MarkdownConverter {
   async convertPost(post: WordPressPost): Promise<void> {
     try {
       const content = this.generateMarkdown(post);
-      await this.writeMarkdownFile(post.post_name, content);
-      console.log(`Converted: ${post.post_name}.md`);
+      const date = new Date(post.post_date_gmt).toISOString().split('T')[0];
+      const fileName = post.post_name.includes('%')
+        ? decodeURIComponent(post.post_name)
+        : post.post_name;
+      await this.writeMarkdownFile(fileName, content, date);
+      console.log(`Converted: ${fileName}.md`);
     } catch (error) {
       const conversionError = new MarkdownConversionError(
         'Error converting post',
@@ -31,9 +35,10 @@ export class MarkdownConverter {
     }
   }
 
-  private async writeMarkdownFile(postName: string, content: string): Promise<void> {
-    const fileName = `${postName}.md`;
+  private async writeMarkdownFile(postName: string, content: string, date: string): Promise<void> {
+    const fileName = `${date}-${postName}.md`;
     const filePath = path.join(this.outputDir, fileName);
+
     try {
       await fs.mkdir(this.outputDir, { recursive: true });
       await fs.writeFile(filePath, content, 'utf-8');
