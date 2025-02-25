@@ -6,6 +6,9 @@ hero:
   name: 桑日記
   text: 桑の日常をあなたにお届け
   tagline: WordPressブログのアーカイブ
+  image:
+    src: /shacho.png
+    alt: 社長の画像
   actions:
     - theme: brand
       text: 記事一覧を見る

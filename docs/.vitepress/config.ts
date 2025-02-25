@@ -9,6 +9,9 @@ export default defineConfig({
 
   // テーマの設定
   themeConfig: {
+    // ロゴの設定
+    logo: '/shacho.png',
+
     // サイトのナビゲーション
     nav: [
       { text: '記事一覧', link: '/posts/' },
