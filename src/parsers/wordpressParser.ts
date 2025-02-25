@@ -1,68 +1,10 @@
 import { parseString } from 'xml2js';
 import { promises as fs } from 'fs';
-import { WordPressExport, WordPressPost, WordPressCategory, WordPressTag, WordPressAuthor } from '../types/wordpress.js';
+import { promisify } from 'util';
+import { WordPressExport, WordPressPost, WordPressCategory, WordPressTag, WordPressAuthor } from '../types/wordpress';
+import { XMLAuthor, XMLCategory, XMLChannel, XMLItem, XMLResult, XMLTag } from '../types/wordpress-xml';
 
-interface XMLResult {
-  rss: {
-    channel: Array<{
-      title: string[];
-      link: string[];
-      description: string[];
-      pubDate: string[];
-      language: string[];
-      'wp:wxr_version': string[];
-      'wp:base_site_url': string[];
-      'wp:base_blog_url': string[];
-      'wp:author'?: Array<{
-        'wp:author_id': string[];
-        'wp:author_login': string[];
-        'wp:author_email': string[];
-        'wp:author_display_name': string[];
-        'wp:author_first_name': string[];
-        'wp:author_last_name': string[];
-      }>;
-      'wp:category'?: Array<{
-        'wp:term_id': string[];
-        'wp:category_nicename': string[];
-        'wp:category_parent': string[];
-        'wp:cat_name': string[];
-        'wp:category_description'?: string[];
-      }>;
-      'wp:tag'?: Array<{
-        'wp:term_id': string[];
-        'wp:tag_slug': string[];
-        'wp:tag_name': string[];
-      }>;
-      item?: Array<{
-        title: string[];
-        link: string[];
-        pubDate: string[];
-        'dc:creator': string[];
-        guid: Array<{
-          _: string;
-          $: {
-            isPermaLink: string;
-          };
-        }>;
-        description: string[];
-        'content:encoded': string[];
-        'excerpt:encoded': string[];
-        'wp:post_id': string[];
-        'wp:post_date': string[];
-        'wp:post_date_gmt': string[];
-        'wp:comment_status': string[];
-        'wp:ping_status': string[];
-        'wp:post_name': string[];
-        'wp:status': string[];
-        'wp:post_parent': string[];
-        'wp:menu_order': string[];
-        'wp:post_type': string[];
-        'wp:post_password': string[];
-        'wp:is_sticky': string[];
-      }>;
-    }>;
-  };
-}
+const parseXMLString = promisify<string, XMLResult>(parseString);
 
 export class WordPressParser {
   private xmlPath: string;
@@ -73,110 +15,116 @@ export class WordPressParser {
 
   async parse(): Promise<WordPressExport> {
     try {
-      const xmlContent = await fs.readFile(this.xmlPath, 'utf-8');
-      return new Promise((resolve, reject) => {
-        parseString(xmlContent, (err: Error | null, result: XMLResult) => {
-          if (err) {
-            reject(err);
-            return;
-          }
-
-          const channel = result.rss.channel[0];
-          const wpExport: WordPressExport = {
-            title: channel.title[0],
-            link: channel.link[0],
-            description: channel.description[0],
-            pubDate: channel.pubDate[0],
-            language: channel.language[0],
-            wxr_version: channel['wp:wxr_version'][0],
-            base_site_url: channel['wp:base_site_url'][0],
-            base_blog_url: channel['wp:base_blog_url'][0],
-            authors: this.parseAuthors(channel['wp:author'] || []),
-            categories: this.parseCategories(channel['wp:category'] || []),
-            tags: this.parseTags(channel['wp:tag'] || []),
-            posts: this.parsePosts(channel.item || [])
-          };
-
-          resolve(wpExport);
-        });
-      });
+      const xmlContent = await this.readXMLFile();
+      const result = await this.parseXMLContent(xmlContent);
+      return this.convertToWordPressExport(result);
     } catch (error) {
-      console.error('Error parsing WordPress XML:', error);
+      this.handleError('Error parsing WordPress XML', error);
       throw error;
     }
   }
 
-  private parseAuthors(authors: NonNullable<XMLResult['rss']['channel'][0]['wp:author']>): WordPressAuthor[] {
+  private async readXMLFile(): Promise<string> {
+    try {
+      return await fs.readFile(this.xmlPath, 'utf-8');
+    } catch (error) {
+      this.handleError('Error reading XML file', error);
+      throw error;
+    }
+  }
+
+  private async parseXMLContent(xmlContent: string): Promise<XMLResult> {
+    try {
+      return await parseXMLString(xmlContent);
+    } catch (error) {
+      this.handleError('Error parsing XML content', error);
+      throw error;
+    }
+  }
+
+  private convertToWordPressExport(result: XMLResult): WordPressExport {
+    const channel = result.rss.channel[0];
+    return {
+      title: this.getFirstValue(channel.title),
+      link: this.getFirstValue(channel.link),
+      description: this.getFirstValue(channel.description),
+      pubDate: this.getFirstValue(channel.pubDate),
+      language: this.getFirstValue(channel.language),
+      wxr_version: this.getFirstValue(channel['wp:wxr_version']),
+      base_site_url: this.getFirstValue(channel['wp:base_site_url']),
+      base_blog_url: this.getFirstValue(channel['wp:base_blog_url']),
+      authors: this.parseAuthors(channel['wp:author'] || []),
+      categories: this.parseCategories(channel['wp:category'] || []),
+      tags: this.parseTags(channel['wp:tag'] || []),
+      posts: this.parsePosts(channel.item || [])
+    };
+  }
+
+  private getFirstValue(array: string[] | undefined): string {
+    return array?.[0] ?? '';
+  }
+
+  private parseAuthors(authors: XMLAuthor[]): WordPressAuthor[] {
     return authors.map(author => ({
-      author_id: author['wp:author_id'][0],
-      author_login: author['wp:author_login'][0],
-      author_email: author['wp:author_email'][0],
-      author_display_name: author['wp:author_display_name'][0],
-      author_first_name: author['wp:author_first_name'][0],
-      author_last_name: author['wp:author_last_name'][0]
+      author_id: this.getFirstValue(author['wp:author_id']),
+      author_login: this.getFirstValue(author['wp:author_login']),
+      author_email: this.getFirstValue(author['wp:author_email']),
+      author_display_name: this.getFirstValue(author['wp:author_display_name']),
+      author_first_name: this.getFirstValue(author['wp:author_first_name']),
+      author_last_name: this.getFirstValue(author['wp:author_last_name'])
     }));
   }
 
-  private parseCategories(categories: NonNullable<XMLResult['rss']['channel'][0]['wp:category']>): WordPressCategory[] {
+  private parseCategories(categories: XMLCategory[]): WordPressCategory[] {
     return categories.map(category => ({
-      term_id: category['wp:term_id'][0],
-      category_nicename: category['wp:category_nicename'][0],
-      category_parent: category['wp:category_parent'][0],
-      cat_name: category['wp:cat_name'][0],
-      category_description: category['wp:category_description']?.[0]
+      term_id: this.getFirstValue(category['wp:term_id']),
+      category_nicename: this.getFirstValue(category['wp:category_nicename']),
+      category_parent: this.getFirstValue(category['wp:category_parent']),
+      cat_name: this.getFirstValue(category['wp:cat_name']),
+      category_description: this.getFirstValue(category['wp:category_description'])
     }));
   }
 
-  private parseTags(tags: NonNullable<XMLResult['rss']['channel'][0]['wp:tag']>): WordPressTag[] {
+  private parseTags(tags: XMLTag[]): WordPressTag[] {
     return tags.map(tag => ({
-      term_id: tag['wp:term_id'][0],
-      tag_slug: tag['wp:tag_slug'][0],
-      tag_name: tag['wp:tag_name'][0]
+      term_id: this.getFirstValue(tag['wp:term_id']),
+      tag_slug: this.getFirstValue(tag['wp:tag_slug']),
+      tag_name: this.getFirstValue(tag['wp:tag_name'])
     }));
   }
 
-  private parsePosts(items: NonNullable<XMLResult['rss']['channel'][0]['item']>): WordPressPost[] {
+  private parsePosts(items: XMLItem[]): WordPressPost[] {
     return items.map(item => ({
-      title: item.title[0],
-      link: item.link[0],
-      pubDate: item.pubDate[0],
-      creator: item['dc:creator'][0],
+      title: this.getFirstValue(item.title),
+      link: this.getFirstValue(item.link),
+      pubDate: this.getFirstValue(item.pubDate),
+      creator: this.getFirstValue(item['dc:creator']),
       guid: {
         _: item.guid[0]._,
         $: { isPermaLink: item.guid[0].$.isPermaLink }
       },
-      description: item.description[0],
-      content: item['content:encoded'][0],
-      excerpt: item['excerpt:encoded'][0],
-      post_id: item['wp:post_id'][0],
-      post_date: item['wp:post_date'][0],
-      post_date_gmt: item['wp:post_date_gmt'][0],
-      comment_status: item['wp:comment_status'][0],
-      ping_status: item['wp:ping_status'][0],
-      post_name: item['wp:post_name'][0],
-      status: item['wp:status'][0],
-      post_parent: item['wp:post_parent'][0],
-      menu_order: item['wp:menu_order'][0],
-      post_type: item['wp:post_type'][0],
-      post_password: item['wp:post_password'][0],
-      is_sticky: item['wp:is_sticky'][0]
+      description: this.getFirstValue(item.description),
+      content: this.getFirstValue(item['content:encoded']),
+      excerpt: this.getFirstValue(item['excerpt:encoded']),
+      post_id: this.getFirstValue(item['wp:post_id']),
+      post_date: this.getFirstValue(item['wp:post_date']),
+      post_date_gmt: this.getFirstValue(item['wp:post_date_gmt']),
+      comment_status: this.getFirstValue(item['wp:comment_status']),
+      ping_status: this.getFirstValue(item['wp:ping_status']),
+      post_name: this.getFirstValue(item['wp:post_name']),
+      status: this.getFirstValue(item['wp:status']),
+      post_parent: this.getFirstValue(item['wp:post_parent']),
+      menu_order: this.getFirstValue(item['wp:menu_order']),
+      post_type: this.getFirstValue(item['wp:post_type']),
+      post_password: this.getFirstValue(item['wp:post_password']),
+      is_sticky: this.getFirstValue(item['wp:is_sticky'])
     }));
   }
-}
 
-// 使用例
-async function main() {
-  const parser = new WordPressParser('./content/WordPress.2020-07-24.xml');
-  try {
-    const wpExport = await parser.parse();
-    console.log('Parsed WordPress export data:');
-    console.log(`Title: ${wpExport.title}`);
-    console.log(`Posts: ${wpExport.posts.length}`);
-    console.log(`Categories: ${wpExport.categories.length}`);
-    console.log(`Tags: ${wpExport.tags.length}`);
-  } catch (error) {
-    console.error('Failed to parse WordPress export:', error);
+  private handleError(message: string, error: unknown): void {
+    console.error(`${message}:`, error);
+    if (error instanceof Error) {
+      console.error('Stack trace:', error.stack);
+    }
   }
 }
-
-main();
