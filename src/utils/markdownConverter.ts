@@ -1,35 +1,10 @@
 import { WordPressPost } from '../types/wordpress';
 import { promises as fs } from 'fs';
 import path from 'path';
-
-const HTML_PATTERNS = {
-  SHORTCODE: /\[.*?\]/g,
-  COMMENT: /<!--[\s\S]*?-->/g,
-  WP_BLOCK: /<\/?wp:.*?>/g,
-  DIV: /<\/?div[^>]*>/g,
-  IFRAME: /<iframe[^>]*src="([^"]*)"[^>]*>.*?<\/iframe>/g,
-  FIGURE_WITH_CAPTION: /<figure[^>]*>\s*<img[^>]*src="([^"]*)"[^>]*>\s*<figcaption>(.*?)<\/figcaption>\s*<\/figure>/g,
-  FIGURE: /<figure[^>]*>\s*<img[^>]*src="([^"]*)"[^>]*>\s*<\/figure>/g,
-  PARAGRAPH: /<p[^>]*>(.*?)<\/p>/g,
-  REMAINING_TAGS: /<[^>]+>/g,
-  MULTIPLE_NEWLINES: /\n{3,}/g,
-  YAML_SPECIAL_CHARS: /[:#\[\]|>{}]/g
-} as const;
-
-const HTML_ENTITIES = {
-  '&amp;': '&',
-  '&lt;': '<',
-  '&gt;': '>',
-  '&quot;': '"',
-  '&#039;': "'"
-} as const;
-
-const HEADING_LEVELS = [1, 2, 3, 4, 5, 6] as const;
-
-interface HTMLConverter {
-  pattern: RegExp;
-  convert: (match: string, ...args: string[]) => string;
-}
+import { HTML_PATTERNS, HTML_ENTITIES, HEADING_LEVELS } from './constants';
+import { HTMLConverter } from './converters/types';
+import { createDefaultConverters } from './converters/implementations';
+import { MarkdownConversionError } from './errors';
 
 export class MarkdownConverter {
   private outputDir: string;
@@ -37,44 +12,7 @@ export class MarkdownConverter {
 
   constructor(outputDir: string) {
     this.outputDir = outputDir;
-    this.converters = this.initializeConverters();
-  }
-
-  private initializeConverters(): HTMLConverter[] {
-    return [
-      {
-        pattern: HTML_PATTERNS.SHORTCODE,
-        convert: () => ''
-      },
-      {
-        pattern: HTML_PATTERNS.COMMENT,
-        convert: () => ''
-      },
-      {
-        pattern: HTML_PATTERNS.WP_BLOCK,
-        convert: () => ''
-      },
-      {
-        pattern: HTML_PATTERNS.DIV,
-        convert: () => ''
-      },
-      {
-        pattern: HTML_PATTERNS.IFRAME,
-        convert: (_, src) => `[外部コンテンツを表示](${src})`
-      },
-      {
-        pattern: HTML_PATTERNS.FIGURE_WITH_CAPTION,
-        convert: (_, src, caption) => `![${caption}](${src})\n*${caption}*`
-      },
-      {
-        pattern: HTML_PATTERNS.FIGURE,
-        convert: (_, src) => `![](${src})`
-      },
-      {
-        pattern: HTML_PATTERNS.PARAGRAPH,
-        convert: (_, content) => `${content}\n\n`
-      }
-    ];
+    this.converters = createDefaultConverters();
   }
 
   async convertPost(post: WordPressPost): Promise<void> {
@@ -83,16 +21,29 @@ export class MarkdownConverter {
       await this.writeMarkdownFile(post.post_name, content);
       console.log(`Converted: ${post.post_name}.md`);
     } catch (error) {
-      this.handleError(`Error converting post ${post.post_name}`, error);
-      throw error;
+      const conversionError = new MarkdownConversionError(
+        'Error converting post',
+        post.post_name,
+        error instanceof Error ? error : undefined
+      );
+      console.error(conversionError.toString());
+      throw conversionError;
     }
   }
 
   private async writeMarkdownFile(postName: string, content: string): Promise<void> {
     const fileName = `${postName}.md`;
     const filePath = path.join(this.outputDir, fileName);
-    await fs.mkdir(this.outputDir, { recursive: true });
-    await fs.writeFile(filePath, content, 'utf-8');
+    try {
+      await fs.mkdir(this.outputDir, { recursive: true });
+      await fs.writeFile(filePath, content, 'utf-8');
+    } catch (error) {
+      throw new MarkdownConversionError(
+        'Error writing markdown file',
+        postName,
+        error instanceof Error ? error : undefined
+      );
+    }
   }
 
   private generateMarkdown(post: WordPressPost): string {
@@ -134,7 +85,7 @@ layout: doc
 
   private applyConverters(content: string): string {
     return this.converters.reduce(
-      (result, converter) => result.replace(converter.pattern, converter.convert),
+      (result, converter) => result.replace(converter.pattern, (...args) => converter.convert(...args)),
       content
     );
   }
@@ -155,12 +106,5 @@ layout: doc
 
   private escapeYaml(text: string): string {
     return text.replace(HTML_PATTERNS.YAML_SPECIAL_CHARS, match => `\\${match}`);
-  }
-
-  private handleError(message: string, error: unknown): void {
-    console.error(`${message}:`, error);
-    if (error instanceof Error) {
-      console.error('Stack trace:', error.stack);
-    }
   }
 }
