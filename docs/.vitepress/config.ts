@@ -21,14 +21,9 @@ export default defineConfig({
 
     // サイドバーの設定
     sidebar: [
-      {
-        text: 'ナビゲーション',
-        items: [
-          { text: '記事一覧', link: '/posts/' },
-          { text: 'カテゴリー', link: '/categories/' },
-          { text: 'タグ', link: '/tags/' }
-        ]
-      }
+      { text: '記事一覧', link: '/posts/' },
+      { text: 'カテゴリー', link: '/categories/' },
+      { text: 'タグ', link: '/tags/' },
     ],
 
     // フッターの設定
