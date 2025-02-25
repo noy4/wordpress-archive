@@ -3,6 +3,7 @@ import { defineConfig } from 'vitepress';
 export default defineConfig({
   title: '桑日記',
   description: '桑の日常をあなたにお届け',
+  ignoreDeadLinks: true,
 
   // GitHub Pagesでのデプロイを想定したベースURL
   base: '/wordpress-archive/',
