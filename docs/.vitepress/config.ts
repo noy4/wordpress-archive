@@ -16,16 +16,20 @@ export default defineConfig({
     // サイトのナビゲーション
     nav: [
       { text: '記事一覧', link: '/posts/' },
-      { text: 'カテゴリー', link: '/categories/' },
-      { text: 'タグ', link: '/tags/' }
+      { text: 'Dev', link: '/dev/issues/' },
     ],
 
     // サイドバーの設定
-    sidebar: [
-      { text: '記事一覧', link: '/posts/' },
-      { text: 'カテゴリー', link: '/categories/' },
-      { text: 'タグ', link: '/tags/' },
-    ],
+    sidebar: {
+      '/': [
+        { text: '記事一覧', link: '/posts/' },
+        { text: 'カテゴリー', link: '/categories/' },
+        { text: 'タグ', link: '/tags/' },
+      ],
+      '/dev/': [
+        { text: 'Issues', link: '/dev/issues/' }
+      ]
+    },
 
     // フッターの設定
     footer: {
