@@ -44,17 +44,18 @@
    - パフォーマンステスト
    - 本番環境へのデプロイ
 
-## 開発プロセス
-
-### ドキュメント管理
-- 技術仕様書: `SPEC.md`
-
-### VitePressサイト構成
+## VitePressサイト構成
 - `/docs`
   - `index.md`: トップページ
   - `posts/`: 記事コンテンツ
   - `categories/`: カテゴリーページ
   - `tags/`: タグページ
   - `dev/`: 開発ドキュメント
+    - `index.md`: 仕様
     - `issues/`: 課題管理
   - `.vitepress/`: VitePress設定・テーマ
+
+### Issues
+- /docs/dev/issues/index.md: 課題一覧
+- /docs/dev/issues/2025_0227062400_create_issue_page.md: 課題詳細
+
