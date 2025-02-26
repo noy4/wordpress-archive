@@ -27,8 +27,14 @@ export default defineConfig({
         { text: 'タグ', link: '/tags/' },
       ],
       '/dev/': [
-        { text: 'Issues', link: '/dev/issues/' }
-      ]
+        {
+          text: 'Dev',
+          link: '/dev/',
+          items: [
+            { text: 'Issues', link: '/dev/issues/' },
+          ],
+        },
+      ],
     },
 
     // フッターの設定
