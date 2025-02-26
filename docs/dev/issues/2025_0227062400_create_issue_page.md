@@ -26,3 +26,8 @@ title: Issue管理ページの作成
 - [x] UIの実装
   - hover効果の追加
   - 見やすい余白とタイポグラフィ
+- [x] vitepressのbase config対応
+  - ナビゲーションメニューの整理
+  - サイドバー構造の改善
+  - Dev セクションの階層構造の追加
+- [] vitepress の base path 対応

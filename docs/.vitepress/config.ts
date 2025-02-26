@@ -16,7 +16,13 @@ export default defineConfig({
     // サイトのナビゲーション
     nav: [
       { text: '記事一覧', link: '/posts/' },
-      { text: 'Dev', link: '/dev/issues/' },
+      {
+        text: 'Dev',
+        items: [
+          { text: '仕様', link: '/dev/' },
+          { text: 'Issues', link: '/dev/issues/' }
+        ]
+      },
     ],
 
     // サイドバーの設定
@@ -29,8 +35,8 @@ export default defineConfig({
       '/dev/': [
         {
           text: 'Dev',
-          link: '/dev/',
           items: [
+            { text: '仕様', link: '/dev/' },
             { text: 'Issues', link: '/dev/issues/' },
           ],
         },
