@@ -11,24 +11,21 @@ interface Issue {
 // マークダウンファイルからIssuesデータを生成
 export default createContentLoader('dev/issues/*.md', {
   transform(raw) {
-    return raw.map(page => {
-      const filename = page.url.split('/').pop()?.replace('.html', '')
-      if (!filename) return null
+    // index.mdを除外し、日付形式のファイルのみを処理
+    return raw
+      .filter(page => /\d{4}_\d{10}_/.test(page.url))
+      .map(page => {
+        const [_, year, timestamp, title] = page.url.match(/(\d{4})_(\d{10})_(.+?)\.html$/)!
+        const dateTime = `${year}-${timestamp.slice(0, 2)}-${timestamp.slice(2, 4)}T${timestamp.slice(4, 6)}:${timestamp.slice(6, 8)}:${timestamp.slice(8, 10)}Z`
 
-      // ファイル名から情報を抽出 (例: 2025_0227062400_create_issue_page.md)
-      const [year, timestamp, ...titleParts] = filename.split('_')
-      const dateTime = `${year}-${timestamp.slice(0, 2)}-${timestamp.slice(2, 4)}T${timestamp.slice(4, 6)}:${timestamp.slice(6, 8)}:${timestamp.slice(8, 10)}Z`
-
-      const issue: Issue = {
-        title: titleParts.join('_').replace(/-/g, ' ').replace('.md', ''),
-        number: parseInt(timestamp, 10),
-        state: page.frontmatter.state || 'open',
-        created_at: dateTime,
-        html_url: page.url
-      }
-
-      return issue
-    }).filter((issue): issue is Issue => issue !== null)
+        return {
+          title: title.replace(/-/g, ' '),
+          number: parseInt(timestamp, 10),
+          state: page.frontmatter.state || 'open',
+          created_at: dateTime,
+          html_url: page.url
+        }
+      })
   }
 })
 
