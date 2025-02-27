@@ -43,6 +43,7 @@ export default defineConfig({
           text: 'Dev',
           items: [
             { text: '仕様', link: '/dev/' },
+            { text: '記事一覧', link: '/dev/posts' },
             { text: 'Issues', link: '/dev/issues/' },
           ],
         },
