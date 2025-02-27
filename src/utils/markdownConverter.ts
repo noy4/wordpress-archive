@@ -1,18 +1,29 @@
 import type { WordPressPost } from '../types/wordpress'
-import type { HTMLConverter } from './converters/types'
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
-import { HEADING_LEVELS, HTML_ENTITIES, HTML_PATTERNS } from './constants'
-import { createDefaultConverters } from './converters/implementations'
+import TurndownService from 'turndown'
+import { HTML_PATTERNS } from './constants'
 import { MarkdownConversionError } from './errors'
 
 export class MarkdownConverter {
   private outputDir: string
-  private converters: HTMLConverter[]
+  private turndown: TurndownService
 
   constructor(outputDir: string) {
     this.outputDir = outputDir
-    this.converters = createDefaultConverters()
+    this.turndown = new TurndownService({
+      headingStyle: 'atx',
+      codeBlockStyle: 'fenced',
+      bulletListMarker: '-',
+    })
+
+    // プリフォーマット済みテキストの変換をカスタマイズ
+    this.turndown.addRule('pre', {
+      filter: ['pre'],
+      replacement: (content) => {
+        return `\n\`\`\`\n${content}\n\`\`\`\n`
+      },
+    })
   }
 
   async convertPost(post: WordPressPost): Promise<void> {
@@ -55,15 +66,14 @@ export class MarkdownConverter {
 
   private generateMarkdown(post: WordPressPost): string {
     const frontMatter = this.generateFrontMatter(post)
-    const content = this.cleanupContent(post.content)
+    const content = this.turndown.turndown(post.content)
     return `${frontMatter}\n\n${content}`
   }
 
   private extractDescription(content: string): string {
-    // 最初の段落からdescriptionを抽出（HTMLタグを除去）
+    // 最初の段落のHTMLを直接Markdownに変換し、プレーンテキストとして扱う
     const firstParagraph = content.match(/<p[^>]*>(.*?)<\/p>/)?.[1] || ''
-    const description = firstParagraph
-      .replace(/<[^>]+>/g, '') // HTMLタグを除去
+    const description = this.turndown.turndown(firstParagraph)
       .replace(/\s+/g, ' ') // 複数の空白を1つに
       .trim()
 
@@ -84,48 +94,6 @@ export class MarkdownConverter {
 title: ${this.escapeYaml(post.title)}${descriptionSection}
 date: ${date}${categories}${tags}
 ---`
-  }
-
-  private cleanupContent(content: string): string {
-    let result = content
-
-    // HTMLタグの変換
-    result = this.applyConverters(result)
-
-    // 見出しタグの変換
-    result = this.convertHeadings(result)
-
-    // 残りのHTMLタグを削除
-    result = result.replace(HTML_PATTERNS.REMAINING_TAGS, '')
-
-    // 空行の正規化
-    result = result.replace(HTML_PATTERNS.MULTIPLE_NEWLINES, '\n\n')
-
-    // HTMLエンティティのデコード
-    result = this.decodeHTMLEntities(result)
-
-    return result.trim()
-  }
-
-  private applyConverters(content: string): string {
-    return this.converters.reduce(
-      (result, converter) => result.replace(converter.pattern, (...args) => converter.convert(...args)),
-      content,
-    )
-  }
-
-  private convertHeadings(content: string): string {
-    return HEADING_LEVELS.reduce((result, level) => {
-      const pattern = new RegExp(`<h${level}[^>]*>(.*?)<\/h${level}>`, 'g')
-      return result.replace(pattern, `${'#'.repeat(level)} $1`)
-    }, content)
-  }
-
-  private decodeHTMLEntities(content: string): string {
-    return Object.entries(HTML_ENTITIES).reduce(
-      (result, [entity, char]) => result.replace(new RegExp(entity, 'g'), char),
-      content,
-    )
   }
 
   private escapeYaml(text: string): string {

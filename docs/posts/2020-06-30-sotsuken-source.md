@@ -4,15 +4,13 @@ date: 2020-06-30
 categories: ["卒業研究"]
 ---
 
-# 研究ソース
-
 ### Git
 
 https://github.com/noy4/bingo-anke
 
 ### 研究マップ
 
-[外部コンテンツを表示](https://www.mindmeister.com/maps/public_map_shell/1549130894/_?width=700&height=600&z=auto&t=CejqbEZ6L3)
+あなたのブラウザはディスプレイフレームに適していません。MindMeisterの<a href="https://www.mindmeister.com/1549130894/\_?t=CejqbEZ6L3" target="\_blank">研究</a>を訪れてください。
 
 ### 目標
 
@@ -20,6 +18,4 @@ https://github.com/noy4/bingo-anke
 
 ### 経過
 
-  See the Pen 
-  アンケ0.2 by noy4 (@noy4)
-  on CodePen.
+See the Pen [アンケ0.2](https://codepen.io/noy4/pen/xxZLdox) by noy4 ([@noy4](https://codepen.io/noy4)) on [CodePen](https://codepen.io).
