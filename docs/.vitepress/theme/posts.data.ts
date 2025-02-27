@@ -13,7 +13,7 @@ export default createContentLoader('posts/!(index).md', {
     return raw
       .map(page => ({
         title: page.frontmatter.title,
-        url: page.url,
+        url: page.url.replace(/^\/posts\/(\d{4}-\d{2}-\d{2}-)/, '/posts/'),
         date: page.frontmatter.date || '',
         categories: page.frontmatter.categories || [],
         tags: page.frontmatter.tags || [],
