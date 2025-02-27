@@ -1,43 +1,49 @@
+import type { HeadConfig } from 'vitepress'
 import { defineConfig } from 'vitepress'
 
+const title = '桑日記'
 const base = '/wordpress-archive/'
 
 export default defineConfig({
-  title: '桑日記',
+  title,
   description: '桑の日常をあなたにお届け',
   ignoreDeadLinks: true,
 
   // GitHub Pagesでのデプロイを想定したベースURL
   base,
 
-  // ページデータの変換
-  transformPageData(pageData) {
-    pageData.frontmatter.head = [
-      ...(pageData.frontmatter.head || []),
-      ['meta', { property: 'og:title', content: pageData.frontmatter.title }],
-      ['meta', { property: 'twitter:title', content: pageData.frontmatter.title }],
-    ]
+  // headタグの変換
+  transformHead({ pageData }) {
+    const head: HeadConfig[] = []
+
+    const pageTitle = pageData.frontmatter.layout === 'home'
+      ? title
+      : `${pageData.title} | ${title}`
+
+    // title用のメタタグを追加
+    head.push(
+      ['meta', { property: 'og:title', content: pageTitle }],
+      ['meta', { property: 'twitter:title', content: pageTitle }],
+    )
 
     // descriptionがある場合のみdescription用のメタタグを追加
     if (pageData.frontmatter.description) {
-      pageData.frontmatter.head.push(
+      head.push(
         ['meta', { property: 'og:description', content: pageData.frontmatter.description }],
         ['meta', { property: 'twitter:description', content: pageData.frontmatter.description }],
       )
     }
+
+    return head
   },
 
   // faviconとOGPの設定
   head: [
     ['link', { rel: 'icon', href: `${base}shacho.png` }],
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:title', content: '桑日記' }],
-    ['meta', { property: 'og:description', content: '桑の日常をあなたにお届け' }],
     ['meta', { property: 'og:image', content: `https://noy4.github.io${base}shacho.png` }],
     ['meta', { property: 'og:url', content: `https://noy4.github.io${base}` }],
     ['meta', { property: 'twitter:card', content: 'summary' }],
-    ['meta', { property: 'twitter:title', content: '桑日記' }],
-    ['meta', { property: 'twitter:description', content: '桑の日常をあなたにお届け' }],
     ['meta', { property: 'twitter:image', content: `https://noy4.github.io${base}shacho.png` }],
   ],
 
