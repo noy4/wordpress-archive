@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { withBase } from 'vitepress'
+import { computed } from 'vue'
 import { data as issues } from '../issues.data'
+
+const openIssues = computed(() => issues.filter(issue => issue.state === 'open'))
+const closedIssues = computed(() => issues.filter(issue => issue.state === 'closed'))
 
 function formatDate(dateString: string) {
   return new Date(dateString).toLocaleDateString('ja-JP')
@@ -8,22 +12,60 @@ function formatDate(dateString: string) {
 </script>
 
 <template>
-  <ul class="issue-list">
-    <li v-for="issue in issues" :key="issue.number" class="issue-item">
-      <div class="issue-content">
-        <a :href="withBase(issue.html_url)" class="issue-link">
-          {{ issue.title }}
-          <span class="issue-state" :class="issue.state">
-            {{ issue.state === 'open' ? '進行中' : '完了' }}
-          </span>
-        </a>
-        <span class="issue-date">{{ formatDate(issue.created_at) }}</span>
-      </div>
-    </li>
-  </ul>
+  <div class="issue-sections">
+    <section class="issue-section">
+      <h3 class="section-title">
+        進行中のタスク
+      </h3>
+      <ul class="issue-list">
+        <li v-for="issue in openIssues" :key="issue.number" class="issue-item">
+          <div class="issue-content">
+            <a :href="withBase(issue.html_url)" class="issue-link">
+              {{ issue.title }}
+              <span class="issue-state" :class="issue.state">
+                {{ issue.state === 'open' ? '進行中' : '完了' }}
+              </span>
+            </a>
+            <span class="issue-date">{{ formatDate(issue.created_at) }}</span>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <section class="issue-section">
+      <h3 class="section-title">
+        完了済みのタスク
+      </h3>
+      <ul class="issue-list">
+        <li v-for="issue in closedIssues" :key="issue.number" class="issue-item">
+          <div class="issue-content">
+            <a :href="withBase(issue.html_url)" class="issue-link">
+              {{ issue.title }}
+              <span class="issue-state" :class="issue.state">
+                {{ issue.state === 'open' ? '進行中' : '完了' }}
+              </span>
+            </a>
+            <span class="issue-date">{{ formatDate(issue.created_at) }}</span>
+          </div>
+        </li>
+      </ul>
+    </section>
+  </div>
 </template>
 
 <style scoped>
+.issue-sections {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.section-title {
+  margin: 0 0 1rem;
+  font-size: 1.2rem;
+  color: var(--vp-c-text-1);
+}
+
 .issue-list {
   list-style: none;
   padding: 0;
