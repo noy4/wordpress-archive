@@ -1,6 +1,6 @@
 ---
 title: 読んだ本
-description: 作品名｜読んだ月｜桑的分類、ジャンル、キーワード｜メモ
+description: !\[\](https\://chankuwa.com/wp-content/uploads/2020/06/hon.png)
 date: 2020-06-29
 categories: ["未分類"]
 ---

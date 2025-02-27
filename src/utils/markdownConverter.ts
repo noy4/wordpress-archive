@@ -29,12 +29,9 @@ export class MarkdownConverter {
   async convertPost(post: WordPressPost): Promise<void> {
     try {
       const content = this.generateMarkdown(post)
-      const date = new Date(post.post_date_gmt).toISOString().split('T')[0]
-      const fileName = post.post_name.includes('%')
-        ? decodeURIComponent(post.post_name)
-        : post.post_name
-      await this.writeMarkdownFile(fileName, content, date)
-      console.warn(`Converted: ${fileName}.md`)
+      const fileName = this.generateFileName(post)
+      await this.writeMarkdownFile(fileName, content)
+      console.warn(`Converted: ${fileName}`)
     }
     catch (error) {
       const conversionError = new MarkdownConversionError(
@@ -47,8 +44,19 @@ export class MarkdownConverter {
     }
   }
 
-  private async writeMarkdownFile(postName: string, content: string, date: string): Promise<void> {
-    const fileName = `${date}-${postName}.md`
+  private generateFileName(post: WordPressPost): string {
+    const date = this.formatDate(post.post_date_gmt)
+    const name = post.post_name.includes('%')
+      ? decodeURIComponent(post.post_name)
+      : post.post_name
+    return `${date}-${name}.md`
+  }
+
+  private formatDate(dateStr: string): string {
+    return new Date(dateStr).toISOString().split('T')[0]
+  }
+
+  private async writeMarkdownFile(fileName: string, content: string): Promise<void> {
     const filePath = path.join(this.outputDir, fileName)
 
     try {
@@ -58,7 +66,7 @@ export class MarkdownConverter {
     catch (error) {
       throw new MarkdownConversionError(
         'Error writing markdown file',
-        postName,
+        fileName,
         error instanceof Error ? error : undefined,
       )
     }
@@ -71,24 +79,29 @@ export class MarkdownConverter {
   }
 
   private extractDescription(content: string): string {
-    // 最初の段落のHTMLを直接Markdownに変換し、プレーンテキストとして扱う
-    const firstParagraph = content.match(/<p[^>]*>(.*?)<\/p>/)?.[1] || ''
-    const description = this.turndown.turndown(firstParagraph)
-      .replace(/\s+/g, ' ') // 複数の空白を1つに
+    // turndownを使って最初の段落を抽出
+    const converted = this.turndown.turndown(content)
+    const firstParagraph = converted.split('\n\n')[0]
+      .replace(/\s+/g, ' ')
       .trim()
 
-    // 120文字以内に収める
-    return description.length > 120 ? `${description.slice(0, 117)}...` : description
+    return firstParagraph.length > 120
+      ? `${firstParagraph.slice(0, 117)}...`
+      : firstParagraph
   }
 
   private generateFrontMatter(post: WordPressPost): string {
-    const date = new Date(post.post_date_gmt).toISOString().split('T')[0]
-    const categories = post.categories.length > 0 ? `\ncategories: [${post.categories.map(c => `"${c}"`).join(', ')}]` : ''
-    const tags = post.tags.length > 0 ? `\ntags: [${post.tags.map(t => `"${t}"`).join(', ')}]` : ''
+    const date = this.formatDate(post.post_date_gmt)
+    const categories = post.categories.length > 0
+      ? `\ncategories: [${post.categories.map(c => `"${c}"`).join(', ')}]`
+      : ''
+    const tags = post.tags.length > 0
+      ? `\ntags: [${post.tags.map(t => `"${t}"`).join(', ')}]`
+      : ''
     const description = this.extractDescription(post.content)
-
-    const hasDescription = description && description.length > 0
-    const descriptionSection = hasDescription ? `\ndescription: ${this.escapeYaml(description)}` : ''
+    const descriptionSection = description
+      ? `\ndescription: ${this.escapeYaml(description)}`
+      : ''
 
     return `---
 title: ${this.escapeYaml(post.title)}${descriptionSection}

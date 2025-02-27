@@ -1,5 +1,6 @@
 ---
 title: 研究ソース
+description: \#\#\# Git
 date: 2020-06-30
 categories: ["卒業研究"]
 ---
