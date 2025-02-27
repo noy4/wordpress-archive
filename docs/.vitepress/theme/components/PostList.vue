@@ -33,21 +33,23 @@ const postsByYear = computed(() => getPostsByYear(posts))
         <li v-for="post in postsInYear" :key="post.url" class="post-item">
           <div class="post-title">
             <a :href="withBase(post.url)">{{ post.title }}</a>
+
+            <div v-if="post.categories?.length || post.tags?.length" class="post-meta">
+              <div v-if="post.categories?.length" class="categories">
+                <span v-for="category in post.categories" :key="category" class="category">
+                  {{ category }}
+                </span>
+              </div>
+              <div v-if="post.tags?.length" class="tags">
+                <span v-for="tag in post.tags" :key="tag" class="tag">
+                  #{{ tag }}
+                </span>
+              </div>
+            </div>
+
             <span class="post-date">
               {{ new Date(post.date).toLocaleDateString('ja-JP') }}
             </span>
-          </div>
-          <div v-if="post.categories?.length || post.tags?.length" class="post-meta">
-            <div v-if="post.categories?.length" class="categories">
-              <span v-for="category in post.categories" :key="category" class="category">
-                {{ category }}
-              </span>
-            </div>
-            <div v-if="post.tags?.length" class="tags">
-              <span v-for="tag in post.tags" :key="tag" class="tag">
-                #{{ tag }}
-              </span>
-            </div>
           </div>
         </li>
       </ul>
@@ -59,17 +61,19 @@ const postsByYear = computed(() => getPostsByYear(posts))
 .post-title {
   display: flex;
   align-items: baseline;
-  gap: 1rem;
+  gap: .5rem;
 }
 
 .post-date {
   color: var(--vp-c-text-2);
   font-size: 0.9em;
+  margin-left: auto;
 }
 
 .post-meta {
-  margin-top: 0.25rem;
-  font-size: 0.9em;
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.75em;
 }
 
 .categories, .tags {
@@ -79,9 +83,9 @@ const postsByYear = computed(() => getPostsByYear(posts))
 }
 
 .category {
-  padding: 0.1rem 0.5rem;
+  padding: 0 0.5rem;
   background-color: var(--vp-c-brand-soft);
-  border-radius: 4px;
+  border-radius: 99px;
   color: var(--vp-c-brand-dark);
 }
 
