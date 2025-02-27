@@ -1,5 +1,6 @@
 ---
 title: YouTube大学に通ってます
+description: 桑迫は思った。
 date: 2019-08-26
 categories: ["未分類"]
 ---

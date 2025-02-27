@@ -1,5 +1,6 @@
 ---
 title: 【留学編\#2】ボードゲーム作った
+description: やぁ諸君、桑迫だ。
 date: 2019-09-23
 categories: ["exchange"]
 tags: ["ボードゲーム", "留学"]
