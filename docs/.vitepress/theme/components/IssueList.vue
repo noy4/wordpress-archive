@@ -8,74 +8,46 @@ function formatDate(dateString: string) {
 </script>
 
 <template>
-  <div class="issue-list">
-    <div v-for="issue in issues" :key="issue.number" class="issue-item">
-      <div class="issue-header">
-        <h2 class="issue-title">
-          <a :href="withBase(issue.html_url)">
-            {{ issue.title }}
-          </a>
-        </h2>
+  <ul class="issue-list">
+    <li v-for="issue in issues" :key="issue.number" class="issue-item">
+      <a :href="withBase(issue.html_url)" class="issue-link">
+        {{ issue.title }}
         <span class="issue-state" :class="issue.state">
           {{ issue.state === 'open' ? '進行中' : '完了' }}
         </span>
-      </div>
-      <div class="issue-meta">
-        <span class="issue-number">#{{ issue.number }}</span>
-        <span class="issue-date">作成: {{ formatDate(issue.created_at) }}</span>
-      </div>
-    </div>
-  </div>
+      </a>
+      <span class="issue-date">{{ formatDate(issue.created_at) }}</span>
+    </li>
+  </ul>
 </template>
 
 <style scoped>
 .issue-list {
+  list-style: none;
+  padding: 0;
   margin: 2rem 0;
 }
 
 .issue-item {
-  padding: 1.5rem;
-  margin-bottom: 1rem;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--vp-c-divider);
 }
 
-.issue-item:hover {
-  background-color: var(--vp-c-bg-soft);
-  transform: translateY(-1px);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+.issue-link {
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+  display: block;
 }
 
-.issue-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 0.75rem;
-}
-
-.issue-title {
-  margin: 0;
-  font-size: 1.25rem;
-  line-height: 1.4;
-  flex: 1;
-  padding-right: 1rem;
-}
-
-.issue-meta {
-  font-size: 0.875rem;
-  color: var(--vp-c-text-2);
-  display: flex;
-  gap: 1rem;
-  align-items: center;
+.issue-link:hover {
+  color: var(--vp-c-brand);
 }
 
 .issue-state {
-  padding: 0.25rem 0.75rem;
-  border-radius: 2rem;
   font-size: 0.75rem;
-  font-weight: 600;
-  white-space: nowrap;
+  padding: 0.2rem 0.5rem;
+  border-radius: 2rem;
+  margin-left: 0.5rem;
 }
 
 .issue-state.open {
@@ -88,16 +60,10 @@ function formatDate(dateString: string) {
   color: white;
 }
 
-.issue-number {
-  font-family: var(--vp-font-family-mono);
-}
-
-a {
-  color: var(--vp-c-text-1);
-  text-decoration: none;
-}
-
-a:hover {
-  color: var(--vp-c-brand);
+.issue-date {
+  font-size: 0.875rem;
+  color: var(--vp-c-text-2);
+  display: block;
+  margin-top: 0.25rem;
 }
 </style>
