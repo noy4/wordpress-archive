@@ -55,9 +55,8 @@ export class MarkdownConverter {
 
   private generateMarkdown(post: WordPressPost): string {
     const frontMatter = this.generateFrontMatter(post)
-    const title = `# ${post.title}`
     const content = this.cleanupContent(post.content)
-    return `${frontMatter}\n\n${title}\n\n${content}`
+    return `${frontMatter}\n\n${content}`
   }
 
   private extractDescription(content: string): string {
