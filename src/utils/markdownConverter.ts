@@ -79,29 +79,11 @@ export class MarkdownConverter {
     const description = this.extractDescription(post.content)
 
     const hasDescription = description && description.length > 0
-
     const descriptionSection = hasDescription ? `\ndescription: ${this.escapeYaml(description)}` : ''
-
-    const descriptionMeta = hasDescription
-      ? `
-  - - meta
-    - property: og:description
-      content: ${this.escapeYaml(description)}
-  - - meta
-    - property: twitter:description
-      content: ${this.escapeYaml(description)}`
-      : ''
 
     return `---
 title: ${this.escapeYaml(post.title)}${descriptionSection}
 date: ${date}${categories}${tags}
-head:
-  - - meta
-    - property: og:title
-      content: ${this.escapeYaml(post.title)}
-  - - meta
-    - property: twitter:title
-      content: ${this.escapeYaml(post.title)}${descriptionMeta}
 ---`
   }
 

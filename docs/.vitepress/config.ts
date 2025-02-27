@@ -10,6 +10,23 @@ export default defineConfig({
   // GitHub Pagesでのデプロイを想定したベースURL
   base,
 
+  // ページデータの変換
+  transformPageData(pageData) {
+    pageData.frontmatter.head = [
+      ...(pageData.frontmatter.head || []),
+      ['meta', { property: 'og:title', content: pageData.frontmatter.title }],
+      ['meta', { property: 'twitter:title', content: pageData.frontmatter.title }],
+    ]
+
+    // descriptionがある場合のみdescription用のメタタグを追加
+    if (pageData.frontmatter.description) {
+      pageData.frontmatter.head.push(
+        ['meta', { property: 'og:description', content: pageData.frontmatter.description }],
+        ['meta', { property: 'twitter:description', content: pageData.frontmatter.description }],
+      )
+    }
+  },
+
   // faviconとOGPの設定
   head: [
     ['link', { rel: 'icon', href: `${base}shacho.png` }],
