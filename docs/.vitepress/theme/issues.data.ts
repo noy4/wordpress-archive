@@ -25,7 +25,7 @@ export default createContentLoader('dev/issues/!(index).md', {
         number: Number.parseInt(timestamp, 10),
         state: isClosed ? 'closed' : (page.frontmatter.state || 'open'),
         created_at: dateTime,
-        html_url: page.url,
+        html_url: page.url.replace(/^\/dev\/issues\/x?\d{4}_\d{10}_/, '/dev/issues/'),
       }
     }).sort((a, b) => {
       // 作成日の降順でソート

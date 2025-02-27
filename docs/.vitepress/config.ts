@@ -8,6 +8,12 @@ export default defineConfig({
   // GitHub Pagesでのデプロイを想定したベースURL
   base: '/wordpress-archive/',
 
+  // URLリライトの設定
+  rewrites(id) {
+    // issuesディレクトリ内のファイルの日時情報を除去
+    return id.replace(/^dev\/issues\/x?\d{4}_\d{10}_/, 'dev/issues/')
+  },
+
   // テーマの設定
   themeConfig: {
     // ロゴの設定
