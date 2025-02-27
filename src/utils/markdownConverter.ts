@@ -2,7 +2,7 @@ import type { WordPressPost } from '../types/wordpress'
 import { promises as fs } from 'node:fs'
 import path from 'node:path'
 import TurndownService from 'turndown'
-import { HTML_PATTERNS } from './constants'
+import { YAML_PATTERNS } from './constants'
 import { MarkdownConversionError } from './errors'
 
 export class MarkdownConverter {
@@ -97,6 +97,6 @@ date: ${date}${categories}${tags}
   }
 
   private escapeYaml(text: string): string {
-    return text.replace(HTML_PATTERNS.YAML_SPECIAL_CHARS, match => `\\${match}`)
+    return text.replace(YAML_PATTERNS.SPECIAL_CHARS, match => `\\${match}`)
   }
 }
