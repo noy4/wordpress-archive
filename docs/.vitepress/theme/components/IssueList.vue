@@ -10,13 +10,15 @@ function formatDate(dateString: string) {
 <template>
   <ul class="issue-list">
     <li v-for="issue in issues" :key="issue.number" class="issue-item">
-      <a :href="withBase(issue.html_url)" class="issue-link">
-        {{ issue.title }}
-        <span class="issue-state" :class="issue.state">
-          {{ issue.state === 'open' ? '進行中' : '完了' }}
-        </span>
-      </a>
-      <span class="issue-date">{{ formatDate(issue.created_at) }}</span>
+      <div class="issue-content">
+        <a :href="withBase(issue.html_url)" class="issue-link">
+          {{ issue.title }}
+          <span class="issue-state" :class="issue.state">
+            {{ issue.state === 'open' ? '進行中' : '完了' }}
+          </span>
+        </a>
+        <span class="issue-date">{{ formatDate(issue.created_at) }}</span>
+      </div>
     </li>
   </ul>
 </template>
@@ -33,10 +35,17 @@ function formatDate(dateString: string) {
   border-bottom: 1px solid var(--vp-c-divider);
 }
 
+.issue-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
 .issue-link {
   color: var(--vp-c-text-1);
   text-decoration: none;
-  display: block;
+  flex: 1;
 }
 
 .issue-link:hover {
@@ -63,7 +72,6 @@ function formatDate(dateString: string) {
 .issue-date {
   font-size: 0.875rem;
   color: var(--vp-c-text-2);
-  display: block;
-  margin-top: 0.25rem;
+  white-space: nowrap;
 }
 </style>
