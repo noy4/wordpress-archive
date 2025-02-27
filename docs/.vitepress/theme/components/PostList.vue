@@ -21,9 +21,9 @@ const postsByYear = computed(() => getPostsByYear(allPosts))
 
 <template>
   <div class="post-list">
-    <div class="post-count">
+    <p class="post-count">
       記事数: {{ allPosts.length }}件
-    </div>
+    </p>
 
     <div
       v-for="[year, postsInYear] in postsByYear"
@@ -37,9 +37,3 @@ const postsByYear = computed(() => getPostsByYear(allPosts))
     </div>
   </div>
 </template>
-
-<style scoped>
-.post-count {
-  margin-top: 1rem;
-}
-</style>
