@@ -1,5 +1,4 @@
 import { createContentLoader } from 'vitepress'
-import type { ContentData } from 'vitepress'
 
 export interface Post {
   title: string
@@ -10,7 +9,7 @@ export interface Post {
 }
 
 export default createContentLoader('posts/!(index).md', {
-  transform(raw: ContentData[]): Post[] {
+  transform(raw): Post[] {
     return raw
       .map(page => ({
         title: page.frontmatter.title,

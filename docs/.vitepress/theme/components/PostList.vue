@@ -3,16 +3,16 @@ import { computed } from 'vue'
 import { data as posts, type Post } from '../posts.data'
 import { withBase } from 'vitepress'
 
-const getPostsByYear = (posts: Post[]) => {
+function getPostsByYear (posts: Post[]) {
   const postsByYear = new Map<string, Post[]>()
-  
+
   posts.forEach(post => {
     const year = new Date(post.date).getFullYear().toString()
     const postsInYear = postsByYear.get(year) || []
     postsByYear.set(year, [...postsInYear, post])
   })
 
-  return new Map([...postsByYear.entries()].sort().reverse())
+  return postsByYear
 }
 
 const postsByYear = computed(() => getPostsByYear(posts))
@@ -53,16 +53,6 @@ const postsByYear = computed(() => getPostsByYear(posts))
 </template>
 
 <style scoped>
-.year-heading {
-  margin: 2rem 0 1rem;
-  font-size: 1.5rem;
-  color: var(--vp-c-brand);
-}
-
-.post-item {
-  margin-bottom: 1rem;
-}
-
 .post-title {
   display: flex;
   align-items: baseline;
