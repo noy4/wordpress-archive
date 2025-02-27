@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { data as issues } from '../issues.data'
 import { withBase } from 'vitepress'
+import { data as issues } from '../issues.data'
 
-const formatDate = (dateString: string) => {
+function formatDate(dateString: string) {
   return new Date(dateString).toLocaleDateString('ja-JP')
 }
 </script>
 
 <template>
   <div class="issue-list">
-      <div v-for="issue in issues" :key="issue.number" class="issue-item">
-        <div class="issue-header">
-          <h2 class="issue-title">
-            <a :href="withBase(issue.html_url)">
-              {{ issue.title }}
-            </a>
-          </h2>
-          <span class="issue-state" :class="issue.state">
-            {{ issue.state === 'open' ? '進行中' : '完了' }}
-          </span>
-        </div>
-        <div class="issue-meta">
-          <span class="issue-number">#{{ issue.number }}</span>
-          <span class="issue-date">作成: {{ formatDate(issue.created_at) }}</span>
-        </div>
+    <div v-for="issue in issues" :key="issue.number" class="issue-item">
+      <div class="issue-header">
+        <h2 class="issue-title">
+          <a :href="withBase(issue.html_url)">
+            {{ issue.title }}
+          </a>
+        </h2>
+        <span class="issue-state" :class="issue.state">
+          {{ issue.state === 'open' ? '進行中' : '完了' }}
+        </span>
+      </div>
+      <div class="issue-meta">
+        <span class="issue-number">#{{ issue.number }}</span>
+        <span class="issue-date">作成: {{ formatDate(issue.created_at) }}</span>
       </div>
     </div>
+  </div>
 </template>
 
 <style scoped>

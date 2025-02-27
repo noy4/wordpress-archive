@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitepress';
+import { defineConfig } from 'vitepress'
 
 export default defineConfig({
   title: '桑日記',
@@ -20,8 +20,8 @@ export default defineConfig({
         text: 'Dev',
         items: [
           { text: '仕様', link: '/dev/' },
-          { text: 'Issues', link: '/dev/issues/' }
-        ]
+          { text: 'Issues', link: '/dev/issues/' },
+        ],
       },
     ],
 
@@ -46,20 +46,20 @@ export default defineConfig({
     // フッターの設定
     footer: {
       message: 'Powered by VitePress',
-      copyright: `© ${new Date().getFullYear()} 桑日記`
+      copyright: `© ${new Date().getFullYear()} 桑日記`,
     },
 
     // ソーシャルリンク
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/noy4/wordpress-archive' }
-    ]
+      { icon: 'github', link: 'https://github.com/noy4/wordpress-archive' },
+    ],
   },
 
   // 多言語設定
   locales: {
     root: {
       label: '日本語',
-      lang: 'ja'
-    }
-  }
-});
+      lang: 'ja',
+    },
+  },
+})

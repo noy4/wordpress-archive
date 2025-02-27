@@ -1,10 +1,10 @@
-import { WordPressPost, WordPressCategory, WordPressTag } from '../types/wordpress';
-import { promises as fs } from 'fs';
+import type { WordPressCategory, WordPressPost, WordPressTag } from '../types/wordpress'
+import { promises as fs } from 'node:fs'
 
 interface PageContent {
-  title: string;
-  content: string;
-  path: string;
+  title: string
+  content: string
+  path: string
 }
 
 export class PageGenerator {
@@ -13,21 +13,21 @@ export class PageGenerator {
 title: ${page.title}
 ---
 
-${page.content}`;
+${page.content}`
 
-    const dir = page.path.substring(0, page.path.lastIndexOf('/'));
-    await fs.mkdir(dir, { recursive: true });
-    await fs.writeFile(page.path, content, 'utf-8');
+    const dir = page.path.substring(0, page.path.lastIndexOf('/'))
+    await fs.mkdir(dir, { recursive: true })
+    await fs.writeFile(page.path, content, 'utf-8')
   }
 
   private getPublishedPosts(posts: WordPressPost[]): WordPressPost[] {
     return posts
       .filter(post => post.post_type === 'post' && post.status === 'publish')
-      .sort((a, b) => new Date(b.post_date).getTime() - new Date(a.post_date).getTime());
+      .sort((a, b) => new Date(b.post_date).getTime() - new Date(a.post_date).getTime())
   }
 
   private formatPostLink(post: WordPressPost): string {
-    return `- [${post.title}](/posts/${post.post_name}/) - ${new Date(post.post_date).toLocaleDateString('ja-JP')}`;
+    return `- [${post.title}](/posts/${post.post_name}/) - ${new Date(post.post_date).toLocaleDateString('ja-JP')}`
   }
 
   private async generateCategoryPage(categories: WordPressCategory[]): Promise<void> {
@@ -36,10 +36,10 @@ ${page.content}`;
       content: `# カテゴリー一覧
 
 ${categories.map(cat => `- [${cat.cat_name}](/categories/${cat.category_nicename}/)`).join('\n')}`,
-      path: 'docs/categories/index.md'
-    };
+      path: 'docs/categories/index.md',
+    }
 
-    await this.writePage(page);
+    await this.writePage(page)
   }
 
   private async generateTagPage(tags: WordPressTag[]): Promise<void> {
@@ -48,37 +48,37 @@ ${categories.map(cat => `- [${cat.cat_name}](/categories/${cat.category_nicename
       content: `# タグ一覧
 
 ${tags.map(tag => `- [${tag.tag_name}](/tags/${tag.tag_slug}/)`).join('\n')}`,
-      path: 'docs/tags/index.md'
-    };
+      path: 'docs/tags/index.md',
+    }
 
-    await this.writePage(page);
+    await this.writePage(page)
   }
 
   private async updateIndexPage(posts: WordPressPost[]): Promise<void> {
-    const recentPosts = this.getPublishedPosts(posts).slice(0, 5);
-    const postList = recentPosts.map(this.formatPostLink).join('\n');
+    const recentPosts = this.getPublishedPosts(posts).slice(0, 5)
+    const postList = recentPosts.map(this.formatPostLink).join('\n')
 
-    const indexContent = await fs.readFile('docs/index.md', 'utf-8');
+    const indexContent = await fs.readFile('docs/index.md', 'utf-8')
     const updatedContent = indexContent.replace(
       /<!-- 記事一覧は動的に生成されます -->/,
-      postList
-    );
+      postList,
+    )
 
-    await fs.writeFile('docs/index.md', updatedContent, 'utf-8');
+    await fs.writeFile('docs/index.md', updatedContent, 'utf-8')
   }
 
   async generateAll(
     posts: WordPressPost[],
     categories: WordPressCategory[],
-    tags: WordPressTag[]
+    tags: WordPressTag[],
   ): Promise<void> {
-    console.log('Generating category pages...');
-    await this.generateCategoryPage(categories);
+    console.log('Generating category pages...')
+    await this.generateCategoryPage(categories)
 
-    console.log('Generating tag pages...');
-    await this.generateTagPage(tags);
+    console.log('Generating tag pages...')
+    await this.generateTagPage(tags)
 
-    console.log('Updating index page...');
-    await this.updateIndexPage(posts);
+    console.log('Updating index page...')
+    await this.updateIndexPage(posts)
   }
 }

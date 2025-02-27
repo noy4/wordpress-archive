@@ -16,12 +16,12 @@ export default createContentLoader('posts/!(index).md', {
         url: page.url,
         date: page.frontmatter.date || '',
         categories: page.frontmatter.categories || [],
-        tags: page.frontmatter.tags || []
+        tags: page.frontmatter.tags || [],
       }))
       .sort((a, b) => {
         return new Date(b.date).getTime() - new Date(a.date).getTime()
       })
-  }
+  },
 })
 
 // Type-only export for the data

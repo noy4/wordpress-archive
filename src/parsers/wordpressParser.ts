@@ -1,49 +1,52 @@
-import { parseString } from 'xml2js';
-import { promises as fs } from 'fs';
-import { promisify } from 'util';
-import { WordPressExport, WordPressPost, WordPressCategory, WordPressTag, WordPressAuthor } from '../types/wordpress';
-import { XMLAuthor, XMLCategory, XMLChannel, XMLItem, XMLResult, XMLTag } from '../types/wordpress-xml';
+import type { WordPressAuthor, WordPressCategory, WordPressExport, WordPressPost, WordPressTag } from '../types/wordpress'
+import type { XMLAuthor, XMLCategory, XMLItem, XMLResult, XMLTag } from '../types/wordpress-xml'
+import { promises as fs } from 'node:fs'
+import { promisify } from 'node:util'
+import { parseString } from 'xml2js'
 
-const parseXMLString = promisify<string, XMLResult>(parseString);
+const parseXMLString = promisify<string, XMLResult>(parseString)
 
 export class WordPressParser {
-  private xmlPath: string;
+  private xmlPath: string
 
   constructor(xmlPath: string) {
-    this.xmlPath = xmlPath;
+    this.xmlPath = xmlPath
   }
 
   async parse(): Promise<WordPressExport> {
     try {
-      const xmlContent = await this.readXMLFile();
-      const result = await this.parseXMLContent(xmlContent);
-      return this.convertToWordPressExport(result);
-    } catch (error) {
-      this.handleError('Error parsing WordPress XML', error);
-      throw error;
+      const xmlContent = await this.readXMLFile()
+      const result = await this.parseXMLContent(xmlContent)
+      return this.convertToWordPressExport(result)
+    }
+    catch (error) {
+      this.handleError('Error parsing WordPress XML', error)
+      throw error
     }
   }
 
   private async readXMLFile(): Promise<string> {
     try {
-      return await fs.readFile(this.xmlPath, 'utf-8');
-    } catch (error) {
-      this.handleError('Error reading XML file', error);
-      throw error;
+      return await fs.readFile(this.xmlPath, 'utf-8')
+    }
+    catch (error) {
+      this.handleError('Error reading XML file', error)
+      throw error
     }
   }
 
   private async parseXMLContent(xmlContent: string): Promise<XMLResult> {
     try {
-      return await parseXMLString(xmlContent);
-    } catch (error) {
-      this.handleError('Error parsing XML content', error);
-      throw error;
+      return await parseXMLString(xmlContent)
+    }
+    catch (error) {
+      this.handleError('Error parsing XML content', error)
+      throw error
     }
   }
 
   private convertToWordPressExport(result: XMLResult): WordPressExport {
-    const channel = result.rss.channel[0];
+    const channel = result.rss.channel[0]
     return {
       title: this.getFirstValue(channel.title),
       link: this.getFirstValue(channel.link),
@@ -56,12 +59,12 @@ export class WordPressParser {
       authors: this.parseAuthors(channel['wp:author'] || []),
       categories: this.parseCategories(channel['wp:category'] || []),
       tags: this.parseTags(channel['wp:tag'] || []),
-      posts: this.parsePosts(channel.item || [])
-    };
+      posts: this.parsePosts(channel.item || []),
+    }
   }
 
   private getFirstValue(array: string[] | undefined): string {
-    return array?.[0] ?? '';
+    return array?.[0] ?? ''
   }
 
   private parseAuthors(authors: XMLAuthor[]): WordPressAuthor[] {
@@ -71,8 +74,8 @@ export class WordPressParser {
       author_email: this.getFirstValue(author['wp:author_email']),
       author_display_name: this.getFirstValue(author['wp:author_display_name']),
       author_first_name: this.getFirstValue(author['wp:author_first_name']),
-      author_last_name: this.getFirstValue(author['wp:author_last_name'])
-    }));
+      author_last_name: this.getFirstValue(author['wp:author_last_name']),
+    }))
   }
 
   private parseCategories(categories: XMLCategory[]): WordPressCategory[] {
@@ -81,16 +84,16 @@ export class WordPressParser {
       category_nicename: this.getFirstValue(category['wp:category_nicename']),
       category_parent: this.getFirstValue(category['wp:category_parent']),
       cat_name: this.getFirstValue(category['wp:cat_name']),
-      category_description: this.getFirstValue(category['wp:category_description'])
-    }));
+      category_description: this.getFirstValue(category['wp:category_description']),
+    }))
   }
 
   private parseTags(tags: XMLTag[]): WordPressTag[] {
     return tags.map(tag => ({
       term_id: this.getFirstValue(tag['wp:term_id']),
       tag_slug: this.getFirstValue(tag['wp:tag_slug']),
-      tag_name: this.getFirstValue(tag['wp:tag_name'])
-    }));
+      tag_name: this.getFirstValue(tag['wp:tag_name']),
+    }))
   }
 
   private parsePosts(items: XMLItem[]): WordPressPost[] {
@@ -101,7 +104,7 @@ export class WordPressParser {
       creator: this.getFirstValue(item['dc:creator']),
       guid: {
         _: item.guid[0]._,
-        $: { isPermaLink: item.guid[0].$.isPermaLink }
+        $: { isPermaLink: item.guid[0].$.isPermaLink },
       },
       description: this.getFirstValue(item.description),
       content: this.getFirstValue(item['content:encoded']),
@@ -119,26 +122,26 @@ export class WordPressParser {
       post_password: this.getFirstValue(item['wp:post_password']),
       is_sticky: this.getFirstValue(item['wp:is_sticky']),
       categories: this.extractCategories(item.category || []),
-      tags: this.extractTags(item.category || [])
-    }));
+      tags: this.extractTags(item.category || []),
+    }))
   }
 
-  private extractCategories(categories: Array<{ _: string; $: { domain: string; nicename: string } }>): string[] {
+  private extractCategories(categories: Array<{ _: string, $: { domain: string, nicename: string } }>): string[] {
     return categories
       .filter(cat => cat.$.domain === 'category')
-      .map(cat => decodeURIComponent(cat.$.nicename));
+      .map(cat => decodeURIComponent(cat.$.nicename))
   }
 
-  private extractTags(categories: Array<{ _: string; $: { domain: string; nicename: string } }>): string[] {
+  private extractTags(categories: Array<{ _: string, $: { domain: string, nicename: string } }>): string[] {
     return categories
       .filter(cat => cat.$.domain === 'post_tag')
-      .map(cat => decodeURIComponent(cat.$.nicename));
+      .map(cat => decodeURIComponent(cat.$.nicename))
   }
 
   private handleError(message: string, error: unknown): void {
-    console.error(`${message}:`, error);
+    console.error(`${message}:`, error)
     if (error instanceof Error) {
-      console.error('Stack trace:', error.stack);
+      console.error('Stack trace:', error.stack)
     }
   }
 }

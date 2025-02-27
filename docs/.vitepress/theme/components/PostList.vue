@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import { data as posts, type Post } from '../posts.data'
+import type { Post } from '../posts.data'
 import { withBase } from 'vitepress'
+import { computed } from 'vue'
+import { data as posts } from '../posts.data'
 
-function getPostsByYear (posts: Post[]) {
+function getPostsByYear(posts: Post[]) {
   const postsByYear = new Map<string, Post[]>()
 
-  posts.forEach(post => {
+  posts.forEach((post) => {
     const year = new Date(post.date).getFullYear().toString()
     const postsInYear = postsByYear.get(year) || []
     postsByYear.set(year, [...postsInYear, post])
@@ -25,7 +26,9 @@ const postsByYear = computed(() => getPostsByYear(posts))
     </div>
 
     <div v-for="[year, postsInYear] in postsByYear" :key="year" class="year-group">
-      <h2 class="year-heading">{{ year }}年</h2>
+      <h2 class="year-heading">
+        {{ year }}年
+      </h2>
       <ul>
         <li v-for="post in postsInYear" :key="post.url" class="post-item">
           <div class="post-title">
@@ -34,13 +37,13 @@ const postsByYear = computed(() => getPostsByYear(posts))
               {{ new Date(post.date).toLocaleDateString('ja-JP') }}
             </span>
           </div>
-          <div class="post-meta" v-if="post.categories?.length || post.tags?.length">
-            <div class="categories" v-if="post.categories?.length">
+          <div v-if="post.categories?.length || post.tags?.length" class="post-meta">
+            <div v-if="post.categories?.length" class="categories">
               <span v-for="category in post.categories" :key="category" class="category">
                 {{ category }}
               </span>
             </div>
-            <div class="tags" v-if="post.tags?.length">
+            <div v-if="post.tags?.length" class="tags">
               <span v-for="tag in post.tags" :key="tag" class="tag">
                 #{{ tag }}
               </span>

@@ -9,15 +9,15 @@ export const HTML_PATTERNS = {
   PARAGRAPH: /<p[^>]*>(.*?)<\/p>/g,
   REMAINING_TAGS: /<[^>]+>/g,
   MULTIPLE_NEWLINES: /\n{3,}/g,
-  YAML_SPECIAL_CHARS: /[:#\[\]|>{}]/g
-} as const;
+  YAML_SPECIAL_CHARS: /[:#[\]|>{}]/g,
+} as const
 
 export const HTML_ENTITIES = {
   '&amp;': '&',
   '&lt;': '<',
   '&gt;': '>',
   '&quot;': '"',
-  '&#039;': "'"
-} as const;
+  '&#039;': '\'',
+} as const
 
-export const HEADING_LEVELS = [1, 2, 3, 4, 5, 6] as const;
+export const HEADING_LEVELS = [1, 2, 3, 4, 5, 6] as const
