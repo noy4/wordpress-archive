@@ -5,6 +5,7 @@ import { h } from 'vue'
 import PostItems from './components/PostItems.vue'
 import PostList from './components/PostList.vue'
 import PostTitle from './components/PostTitle.vue'
+import 'virtual:uno.css'
 
 export default {
   extends: DefaultTheme,

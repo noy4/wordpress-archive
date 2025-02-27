@@ -1,10 +1,16 @@
 import type { HeadConfig } from 'vitepress'
+import UnoCSS from 'unocss/vite'
 import { defineConfig } from 'vitepress'
 
 const title = '桑日記'
 const base = '/wordpress-archive/'
 
 export default defineConfig({
+  // UnoCSSの設定
+  vite: {
+    plugins: [UnoCSS()],
+  },
+
   title,
   description: '桑の日常をあなたにお届け',
   ignoreDeadLinks: true,
