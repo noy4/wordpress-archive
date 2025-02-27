@@ -11,7 +11,14 @@ export default defineConfig({
   // URLリライトの設定
   rewrites(id) {
     // issuesディレクトリ内のファイルの日時情報を除去
-    return id.replace(/^dev\/issues\/x?\d{4}_\d{10}_/, 'dev/issues/')
+    if (id.startsWith('dev/issues/'))
+      return id.replace(/^dev\/issues\/x?\d{4}_\d{10}_/, 'dev/issues/')
+
+    // postsディレクトリ内のファイルのタイムスタンプを除去
+    if (id.startsWith('posts/'))
+      return id.replace(/^posts\/\d{4}-\d{2}-\d{2}-/, 'posts/')
+
+    return id
   },
 
   // テーマの設定
