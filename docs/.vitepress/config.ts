@@ -1,12 +1,19 @@
 import { defineConfig } from 'vitepress'
 
+const base = '/wordpress-archive/'
+
 export default defineConfig({
   title: '桑日記',
   description: '桑の日常をあなたにお届け',
   ignoreDeadLinks: true,
 
   // GitHub Pagesでのデプロイを想定したベースURL
-  base: '/wordpress-archive/',
+  base,
+
+  // faviconの設定
+  head: [
+    ['link', { rel: 'icon', href: `${base}shacho.png` }],
+  ],
 
   // URLリライトの設定
   rewrites(id) {
