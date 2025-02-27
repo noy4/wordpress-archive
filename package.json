@@ -1,29 +1,33 @@
 {
   "name": "wordpress-archive",
-  "version": "1.0.0",
   "type": "module",
+  "version": "1.0.0",
   "description": "WordPress archive site generator",
-  "scripts": {
-    "dev": "vitepress dev docs",
-    "build": "vitepress build docs",
-    "preview": "vitepress preview docs",
-    "convert": "tsx src/index.ts",
-    "start": "npm run convert && npm run dev"
-  },
+  "author": "",
+  "license": "ISC",
   "keywords": [
     "wordpress",
     "vitepress",
     "archive"
   ],
-  "author": "",
-  "license": "ISC",
+  "scripts": {
+    "dev": "vitepress dev docs",
+    "build": "vitepress build docs",
+    "preview": "vitepress preview docs",
+    "convert": "tsx src/index.ts",
+    "start": "npm run convert && npm run dev",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
   "dependencies": {
     "@types/node": "^20.11.0",
     "vitepress": "^1.0.0",
     "xml2js": "^0.6.0"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^4.3.0",
     "@types/xml2js": "^0.4.14",
+    "eslint": "^9.21.0",
     "tsx": "^4.19.3"
   }
 }
