@@ -23,7 +23,7 @@ export class MarkdownConverter {
         ? decodeURIComponent(post.post_name)
         : post.post_name
       await this.writeMarkdownFile(fileName, content, date)
-      console.log(`Converted: ${fileName}.md`)
+      console.warn(`Converted: ${fileName}.md`)
     }
     catch (error) {
       const conversionError = new MarkdownConversionError(
@@ -60,14 +60,41 @@ export class MarkdownConverter {
     return `${frontMatter}\n\n${title}\n\n${content}`
   }
 
+  private extractDescription(content: string): string {
+    // 最初の段落からdescriptionを抽出（HTMLタグを除去）
+    const firstParagraph = content.match(/<p[^>]*>(.*?)<\/p>/)?.[1] || ''
+    const description = firstParagraph
+      .replace(/<[^>]+>/g, '') // HTMLタグを除去
+      .replace(/\s+/g, ' ') // 複数の空白を1つに
+      .trim()
+
+    // 120文字以内に収める
+    return description.length > 120 ? `${description.slice(0, 117)}...` : description
+  }
+
   private generateFrontMatter(post: WordPressPost): string {
     const date = new Date(post.post_date_gmt).toISOString().split('T')[0]
     const categories = post.categories.length > 0 ? `\ncategories: [${post.categories.map(c => `"${c}"`).join(', ')}]` : ''
     const tags = post.tags.length > 0 ? `\ntags: [${post.tags.map(t => `"${t}"`).join(', ')}]` : ''
+    const description = this.extractDescription(post.content)
 
     return `---
 title: ${this.escapeYaml(post.title)}
+description: ${this.escapeYaml(description)}
 date: ${date}${categories}${tags}
+head:
+  - - meta
+    - property: og:title
+      content: ${this.escapeYaml(post.title)}
+  - - meta
+    - property: og:description
+      content: ${this.escapeYaml(description)}
+  - - meta
+    - property: twitter:title
+      content: ${this.escapeYaml(post.title)}
+  - - meta
+    - property: twitter:description
+      content: ${this.escapeYaml(description)}
 ---`
   }
 
