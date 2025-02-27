@@ -37,3 +37,9 @@ const postsByYear = computed(() => getPostsByYear(allPosts))
     </div>
   </div>
 </template>
+
+<style scoped>
+.post-count {
+  margin-top: 1rem;
+}
+</style>
