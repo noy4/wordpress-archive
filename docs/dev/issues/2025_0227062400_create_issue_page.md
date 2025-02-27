@@ -15,21 +15,7 @@ title: Issue管理ページの作成
 - 作成日順でソート
 
 ## 進捗
-- [x] コンポーネントの作成
-  - IssueList.vueコンポーネントを実装
-  - レスポンシブなレイアウト
-  - ステータスバッジのデザイン
-- [x] ファイル読み込み処理の実装
-  - フロントマターでの状態管理
-  - xプレフィックスでのclosed状態の判定
-  - 作成日順でのソート
-- [x] UIの実装
-  - hover効果の追加
-  - 見やすい余白とタイポグラフィ
-- [x] vitepressのbase config対応
-  - ナビゲーションメニューの整理
-  - サイドバー構造の改善
-  - Dev セクションの階層構造の追加
-- [x] vitepress の base path 対応
-  - withBaseを使用したURLのbase path対応
-  - VitePressの公式APIを活用
+- [x] IssueList.vueコンポーネントの作成と実装
+- [x] Issue一覧の表示と状態管理の実装
+- [x] UIデザインとレイアウトの調整
+- [x] vitepressの設定とナビゲーション構造の整備
