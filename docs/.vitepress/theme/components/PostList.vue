@@ -1,6 +1,21 @@
 <script setup lang="ts">
-import { data as posts } from '../posts.data'
+import { computed } from 'vue'
+import { data as posts, type Post } from '../posts.data'
 import { withBase } from 'vitepress'
+
+const getPostsByYear = (posts: Post[]) => {
+  const postsByYear = new Map<string, Post[]>()
+  
+  posts.forEach(post => {
+    const year = new Date(post.date).getFullYear().toString()
+    const postsInYear = postsByYear.get(year) || []
+    postsByYear.set(year, [...postsInYear, post])
+  })
+
+  return new Map([...postsByYear.entries()].sort().reverse())
+}
+
+const postsByYear = computed(() => getPostsByYear(posts))
 </script>
 
 <template>
@@ -9,23 +24,75 @@ import { withBase } from 'vitepress'
       記事数: {{ posts.length }}件
     </div>
 
-    <ul>
-      <li v-for="post in posts" :key="post.url">
-        <a :href="withBase(post.url)">{{ post.title }}</a>
-        <span class="post-date" v-if="post.date">
-          - {{ new Date(post.date).toLocaleDateString('ja-JP') }}
-        </span>
-      </li>
-    </ul>
+    <div v-for="[year, postsInYear] in postsByYear" :key="year" class="year-group">
+      <h2 class="year-heading">{{ year }}年</h2>
+      <ul>
+        <li v-for="post in postsInYear" :key="post.url" class="post-item">
+          <div class="post-title">
+            <a :href="withBase(post.url)">{{ post.title }}</a>
+            <span class="post-date">
+              {{ new Date(post.date).toLocaleDateString('ja-JP') }}
+            </span>
+          </div>
+          <div class="post-meta" v-if="post.categories?.length || post.tags?.length">
+            <div class="categories" v-if="post.categories?.length">
+              <span v-for="category in post.categories" :key="category" class="category">
+                {{ category }}
+              </span>
+            </div>
+            <div class="tags" v-if="post.tags?.length">
+              <span v-for="tag in post.tags" :key="tag" class="tag">
+                #{{ tag }}
+              </span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.post-count {
-  margin-top: 1rem;
+.year-heading {
+  margin: 2rem 0 1rem;
+  font-size: 1.5rem;
+  color: var(--vp-c-brand);
+}
+
+.post-item {
+  margin-bottom: 1rem;
+}
+
+.post-title {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
 }
 
 .post-date {
+  color: var(--vp-c-text-2);
+  font-size: 0.9em;
+}
+
+.post-meta {
+  margin-top: 0.25rem;
+  font-size: 0.9em;
+}
+
+.categories, .tags {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.category {
+  padding: 0.1rem 0.5rem;
+  background-color: var(--vp-c-brand-soft);
+  border-radius: 4px;
+  color: var(--vp-c-brand-dark);
+}
+
+.tag {
   color: var(--vp-c-text-2);
 }
 </style>
