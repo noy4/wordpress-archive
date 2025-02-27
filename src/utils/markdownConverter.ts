@@ -79,15 +79,16 @@ export class MarkdownConverter {
   }
 
   private extractDescription(content: string): string {
-    // turndownを使って最初の段落を抽出
-    const converted = this.turndown.turndown(content)
-    const firstParagraph = converted.split('\n\n')[0]
-      .replace(/\s+/g, ' ')
-      .trim()
+    // HTMLから最初のテキストブロックを抽出
+    const text = content
+      .replace(/<[^>]*>/g, '') // HTMLタグを削除
+      .replace(/\s+/g, ' ') // 複数の空白を1つに
+      .trim() // 前後の空白を削除
 
-    return firstParagraph.length > 120
-      ? `${firstParagraph.slice(0, 117)}...`
-      : firstParagraph
+    // 120文字以上なら117文字に切り詰めて「...」を追加
+    return text.length > 120
+      ? `${text.slice(0, 117)}...`
+      : text
   }
 
   private generateFrontMatter(post: WordPressPost): string {

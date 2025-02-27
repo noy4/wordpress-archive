@@ -1,6 +1,6 @@
 ---
 title: DjangoをConohaでデプロイ
-description: \[DjangoGirlsで作ったWebアプリを、ConoHa VPSでデプロイ\](https\://qiita.com/khashi001/items/3b2dbf2dafa9079e5859)を見ながらやって詰まったところを補足します。
+description: DjangoGirlsで作ったWebアプリを、ConoHa VPSでデプロイを見ながらやって詰まったところを補足します。 手順 2. ConohaのSSH関連を設定 は飛ばせる デプロイの練習したいだけのただの学生なら飛ばしていいです...
 date: 2020-03-23
 categories: ["programming"]
 ---

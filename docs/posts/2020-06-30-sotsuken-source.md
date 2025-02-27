@@ -1,6 +1,6 @@
 ---
 title: 研究ソース
-description: \#\#\# Git
+description: Git https\://github.com/noy4/bingo-anke 研究マップ あなたのブラウザはディスプレイフレームに適していません。MindMeisterの研究を訪れてください。 目標 経過 See the Pen アン...
 date: 2020-06-30
 categories: ["卒業研究"]
 ---
