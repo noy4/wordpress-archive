@@ -25,7 +25,7 @@ export default createContentLoader('dev/issues/!(index).md', {
         number: parseInt(timestamp, 10),
         state: isClosed ? 'closed' : (page.frontmatter.state || 'open'),
         created_at: dateTime,
-        html_url: page.url
+        html_url: page.url,
       }
     }).sort((a, b) => {
       // 作成日の降順でソート

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { data as issues } from '../issues.data'
+import { withBase } from 'vitepress'
 
 const formatDate = (dateString: string) => {
   return new Date(dateString).toLocaleDateString('ja-JP')
@@ -11,7 +12,7 @@ const formatDate = (dateString: string) => {
       <div v-for="issue in issues" :key="issue.number" class="issue-item">
         <div class="issue-header">
           <h2 class="issue-title">
-            <a :href="issue.html_url">
+            <a :href="withBase(issue.html_url)">
               {{ issue.title }}
             </a>
           </h2>

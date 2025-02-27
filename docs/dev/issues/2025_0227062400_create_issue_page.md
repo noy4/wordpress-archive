@@ -30,4 +30,6 @@ title: Issue管理ページの作成
   - ナビゲーションメニューの整理
   - サイドバー構造の改善
   - Dev セクションの階層構造の追加
-- [] vitepress の base path 対応
+- [x] vitepress の base path 対応
+  - withBaseを使用したURLのbase path対応
+  - VitePressの公式APIを活用
