@@ -10,6 +10,7 @@ interface Issue {
 
 // マークダウンファイルからIssuesデータを生成
 export default createContentLoader('dev/issues/!(index).md', {
+  includeSrc: true,
   transform(raw) {
     return raw.map((page) => {
       // ファイル名からx接頭辞とタイムスタンプを解析
@@ -20,8 +21,12 @@ export default createContentLoader('dev/issues/!(index).md', {
       // タイムスタンプからDateTime文字列を生成
       const dateTime = `${year}-${timestamp.slice(0, 2)}-${timestamp.slice(2, 4)}T${timestamp.slice(4, 6)}:${timestamp.slice(6, 8)}:${timestamp.slice(8, 10)}Z`
 
+      // マークダウンから最初のh1を抽出
+      const h1Match = page.src?.match(/^#\s+([^\n]+)/m)
+      const h1Title = h1Match?.[1]?.trim()
+
       return {
-        title: page.frontmatter.title || title.replace(/-/g, ' '),
+        title: page.frontmatter.title || h1Title || title.replace(/-/g, ' '),
         number: Number.parseInt(timestamp, 10),
         state: isClosed ? 'closed' : (page.frontmatter.state || 'open'),
         created_at: dateTime,

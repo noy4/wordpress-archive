@@ -1,4 +1,4 @@
-# antfu/eslint-config のセットアップ
+# `@antfu/eslint-config` のセットアップ
 
 ## 作業内容
 1. パッケージのインストール
