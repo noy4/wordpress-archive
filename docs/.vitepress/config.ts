@@ -10,9 +10,18 @@ export default defineConfig({
   // GitHub Pagesでのデプロイを想定したベースURL
   base,
 
-  // faviconの設定
+  // faviconとOGPの設定
   head: [
     ['link', { rel: 'icon', href: `${base}shacho.png` }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:title', content: '桑日記' }],
+    ['meta', { property: 'og:description', content: '桑の日常をあなたにお届け' }],
+    ['meta', { property: 'og:image', content: `https://noy4.github.io${base}shacho.png` }],
+    ['meta', { property: 'og:url', content: `https://noy4.github.io${base}` }],
+    ['meta', { property: 'twitter:card', content: 'summary' }],
+    ['meta', { property: 'twitter:title', content: '桑日記' }],
+    ['meta', { property: 'twitter:description', content: '桑の日常をあなたにお届け' }],
+    ['meta', { property: 'twitter:image', content: `https://noy4.github.io${base}shacho.png` }],
   ],
 
   // URLリライトの設定

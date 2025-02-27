@@ -11,7 +11,8 @@
     "archive"
   ],
   "scripts": {
-    "dev": "vitepress dev docs",
+    "dev": "npm run docs:dev",
+    "docs:dev": "vitepress dev docs",
     "build": "vitepress build docs",
     "preview": "vitepress preview docs",
     "convert": "tsx src/index.ts",
