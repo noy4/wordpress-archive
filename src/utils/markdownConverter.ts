@@ -60,9 +60,12 @@ export class MarkdownConverter {
 
   private generateFrontMatter(post: WordPressPost): string {
     const date = new Date(post.post_date_gmt).toISOString().split('T')[0];
+    const categories = post.categories.length > 0 ? `\ncategories: [${post.categories.map(c => `"${c}"`).join(', ')}]` : '';
+    const tags = post.tags.length > 0 ? `\ntags: [${post.tags.map(t => `"${t}"`).join(', ')}]` : '';
+
     return `---
 title: ${this.escapeYaml(post.title)}
-date: ${date}
+date: ${date}${categories}${tags}
 ---`;
   }
 

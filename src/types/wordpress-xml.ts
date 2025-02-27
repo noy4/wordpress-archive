@@ -49,6 +49,17 @@ export interface XMLItem {
   'wp:post_type': string[];
   'wp:post_password': string[];
   'wp:is_sticky': string[];
+  'category': Array<{
+    _: string;
+    $: {
+      domain: string;
+      nicename: string;
+    };
+  }>;
+  'wp:postmeta'?: Array<{
+    'wp:meta_key': string[];
+    'wp:meta_value': string[];
+  }>;
 }
 
 export interface XMLChannel {

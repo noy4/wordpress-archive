@@ -117,8 +117,22 @@ export class WordPressParser {
       menu_order: this.getFirstValue(item['wp:menu_order']),
       post_type: this.getFirstValue(item['wp:post_type']),
       post_password: this.getFirstValue(item['wp:post_password']),
-      is_sticky: this.getFirstValue(item['wp:is_sticky'])
+      is_sticky: this.getFirstValue(item['wp:is_sticky']),
+      categories: this.extractCategories(item.category || []),
+      tags: this.extractTags(item.category || [])
     }));
+  }
+
+  private extractCategories(categories: Array<{ _: string; $: { domain: string; nicename: string } }>): string[] {
+    return categories
+      .filter(cat => cat.$.domain === 'category')
+      .map(cat => decodeURIComponent(cat.$.nicename));
+  }
+
+  private extractTags(categories: Array<{ _: string; $: { domain: string; nicename: string } }>): string[] {
+    return categories
+      .filter(cat => cat.$.domain === 'post_tag')
+      .map(cat => decodeURIComponent(cat.$.nicename));
   }
 
   private handleError(message: string, error: unknown): void {

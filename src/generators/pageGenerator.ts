@@ -67,24 +67,6 @@ ${tags.map(tag => `- [${tag.tag_name}](/tags/${tag.tag_slug}/)`).join('\n')}`,
     await fs.writeFile('docs/index.md', updatedContent, 'utf-8');
   }
 
-  private async generatePostListPage(posts: WordPressPost[]): Promise<void> {
-    const publishedPosts = this.getPublishedPosts(posts);
-
-    const page: PageContent = {
-      title: '記事一覧',
-      content: `# 記事一覧
-
-::: details 記事数: ${publishedPosts.length}件
-全ての記事を時系列順に表示しています。
-:::
-
-${publishedPosts.map(this.formatPostLink).join('\n')}`,
-      path: 'docs/posts/index.md'
-    };
-
-    await this.writePage(page);
-  }
-
   async generateAll(
     posts: WordPressPost[],
     categories: WordPressCategory[],
@@ -98,8 +80,5 @@ ${publishedPosts.map(this.formatPostLink).join('\n')}`,
 
     console.log('Updating index page...');
     await this.updateIndexPage(posts);
-
-    console.log('Generating post list page...');
-    await this.generatePostListPage(posts);
   }
 }

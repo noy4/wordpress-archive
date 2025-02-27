@@ -1,6 +1,7 @@
 ---
 title: YouTube大学に通ってます
 date: 2019-08-26
+categories: ["未分類"]
 ---
 
 # YouTube大学に通ってます

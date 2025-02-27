@@ -24,6 +24,8 @@ export interface WordPressPost {
   post_type: string;
   post_password: string;
   is_sticky: string;
+  categories: string[];
+  tags: string[];
 }
 
 export interface WordPressCategory {
