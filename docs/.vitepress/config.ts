@@ -73,9 +73,10 @@ export default defineConfig({
 
     // サイトのナビゲーション
     nav: [
-      { text: '記事一覧', link: '/posts/' },
+      { text: '記事一覧', link: '/posts/', activeMatch: '/posts/' },
       {
         text: 'Dev',
+        activeMatch: '/dev/',
         items: [
           { text: '仕様', link: '/dev/' },
           { text: 'Issues', link: '/dev/issues/' },
