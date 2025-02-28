@@ -1,5 +1,6 @@
 <script setup>
 import { useData } from 'vitepress'
+import Tag from './Tag.vue'
 
 const { frontmatter } = useData()
 const date = new Date(frontmatter.value.date).toLocaleDateString('ja-JP')
@@ -8,23 +9,19 @@ const date = new Date(frontmatter.value.date).toLocaleDateString('ja-JP')
 <template>
   <div class="vp-doc">
     <h1>{{ frontmatter.title }}</h1>
-    <p>
-      <a
+    <div class="flex items-center gap-1.5 mt-4 mb-8">
+      <Badge
         v-for="category in frontmatter.categories"
         :key="category"
-      >
-        {{ category }}
-      </a>
-      <a
+        :text="category"
+        class="transform-none"
+      />
+      <Tag
         v-for="tag in frontmatter.tags"
         :key="tag"
-      >
-        #{{ tag }}
-      </a>
-    </p>
-
-    <p>
-      <span>{{ date }}</span>
-    </p>
+        :tag="tag"
+      />
+      <span class="ml-auto">{{ date }}</span>
+    </div>
   </div>
 </template>
