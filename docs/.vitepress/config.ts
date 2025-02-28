@@ -18,6 +18,16 @@ export default defineConfig({
   // GitHub Pagesでのデプロイを想定したベースURL
   base,
 
+  // faviconとOGPの設定
+  head: [
+    ['link', { rel: 'icon', href: `${base}shacho.png` }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:image', content: `https://noy4.github.io${base}shacho.png` }],
+    ['meta', { property: 'og:url', content: `https://noy4.github.io${base}` }],
+    ['meta', { property: 'twitter:card', content: 'summary' }],
+    ['meta', { property: 'twitter:image', content: `https://noy4.github.io${base}shacho.png` }],
+  ],
+
   // headタグの変換
   transformHead({ pageData }) {
     const head: HeadConfig[] = []
@@ -33,25 +43,16 @@ export default defineConfig({
     )
 
     // descriptionがある場合のみdescription用のメタタグを追加
-    if (pageData.frontmatter.description) {
+    const description = pageData.description
+    if (description) {
       head.push(
-        ['meta', { property: 'og:description', content: pageData.frontmatter.description }],
-        ['meta', { property: 'twitter:description', content: pageData.frontmatter.description }],
+        ['meta', { property: 'og:description', content: description }],
+        ['meta', { property: 'twitter:description', content: description }],
       )
     }
 
     return head
   },
-
-  // faviconとOGPの設定
-  head: [
-    ['link', { rel: 'icon', href: `${base}shacho.png` }],
-    ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:image', content: `https://noy4.github.io${base}shacho.png` }],
-    ['meta', { property: 'og:url', content: `https://noy4.github.io${base}` }],
-    ['meta', { property: 'twitter:card', content: 'summary' }],
-    ['meta', { property: 'twitter:image', content: `https://noy4.github.io${base}shacho.png` }],
-  ],
 
   // URLリライトの設定
   rewrites(id) {
