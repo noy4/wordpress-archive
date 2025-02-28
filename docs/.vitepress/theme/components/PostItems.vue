@@ -19,7 +19,7 @@ const limitedPosts = computed(() => props.posts.slice(0, props.limit))
   <ul>
     <li v-for="post in limitedPosts" :key="post.url" class="post-item">
       <div class="post-title">
-        <a :href="withBase(post.url)">{{ post.title }}</a>
+        <a :href="withBase(post.url)" class="decoration-none!">{{ post.title }}</a>
 
         <div v-if="post.categories?.length || post.tags?.length" class="post-meta">
           <div v-if="post.categories?.length" class="categories">
