@@ -45,6 +45,7 @@ const limitedPosts = computed(() => props.posts.slice(0, props.limit))
 <style scoped>
 .post-title {
   display: flex;
+  flex-wrap: wrap;
   gap: .5rem;
 }
 
